@@ -1,0 +1,38 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: xin_test
+  datasource:
+    url: jdbc:mysql://localhost:3306/xin_test?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.xin.test.entity
+  configuration:
+    map-underscore-to-camel-case: true
+
+# 业务 MCP 服务端配置（供 Agent 平台注册调用 / MCPWorld 提交）
+# 提交 MCPWorld 前必读 docs/mcpworld-submit.md
+mcp:
+  server:
+    name: xin-test-mcp
+    version: 1.0.0
+    # 支持的最新协议版本：2024-11-05 / 2025-03-26 / 2025-06-18 / 2025-11-25
+    protocol-version: "2025-06-18"
+    # 预共享密钥；为空表示不校验（仅限本地开发）。
+    # 部署公网 / 提交 MCPWorld 审核前必须配置非空值，
+    # 并将同一密钥填入 MCPWorld 表单的「请求头」与「鉴权参数」栏
+    auth-token: ""
+    # 单文件大小上限：10MB
+    max-file-size-bytes: 10485760
+    default-mime-type: application/pdf
+
+logging:
+  level:
+    com.xin.test.mapper: debug
+    com.xin.test.mcp: info
