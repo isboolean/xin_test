@@ -28,7 +28,7 @@
 | 表单项 | 填写内容 |
 | --- | --- |
 | 英文名称 | `xin-test-mcp` |
-| URL | `https://<你的公网域名>/mcp` |
+| URL | `http://62.234.131.142/mcp` |
 | 请求头（选填） | `Authorization=Bearer <预共享密钥>`（每行一个 key=value） |
 | 审核测试用鉴权参数（选填） | `<预共享密钥>`，与请求头一致，供平台审核时验证服务可用性 |
 | 平台调用鉴权参数（选填） | `<预共享密钥>`，供百度渠道分发调用使用 |
@@ -75,12 +75,12 @@
 预共享密钥（Pre-shared key）。平台调用时请携带上述请求头之一。
 
 ## 联调示例
-curl -X POST https://<你的公网域名>/mcp \
+curl -X POST http://62.234.131.142/mcp \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"mcpworld","version":"1.0"}}}'
 
-curl -X POST https://<你的公网域名>/mcp \
+curl -X POST http://62.234.131.142/mcp \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"download_file_unstructured","arguments":{"fileId":"F20261116001"}}}'
@@ -92,10 +92,14 @@ curl -X POST https://<你的公网域名>/mcp \
 - **联系方式**：填写真实手机号 + 邮箱
 - **提交后**：在「My MCP」页查看审核状态；被驳回时点问号查看原因，修改后重提
 
-## 6. 提交前验证清单（部署到公网后逐条执行）
+## 6. 提交前验证清单（已部署：北京轻量服务器 62.234.131.142）
+
+> 服务已部署并通过全部验证（2026-11-17）。预共享密钥保存在服务器
+> `/etc/systemd/system/xin-test-mcp.service` 的启动参数中（服务器 `/tmp/mcp_token.txt` 有副本，
+> 重启后以 systemd 单元为准）。**密钥不要提交到本公开仓库。**
 
 ```bash
-BASE=https://<你的公网域名>
+BASE=http://62.234.131.142
 TOKEN=<预共享密钥>
 
 # 1. 探活

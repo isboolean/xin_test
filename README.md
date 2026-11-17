@@ -59,7 +59,7 @@ Streamable HTTP 传输与预共享密钥鉴权。**完整的表单填写内容�
 {
   "name": "xin-test-mcp",
   "transport": "streamable-http",
-  "url": "http://<业务域名>/mcp",
+  "url": "http://62.234.131.142/mcp",
   "headers": { "Authorization": "Bearer <预共享密钥>" },
   "tools": ["download_file_unstructured"]
 }
