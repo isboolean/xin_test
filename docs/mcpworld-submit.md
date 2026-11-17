@@ -8,10 +8,10 @@
 
 | # | 条件 | 当前状态 |
 | --- | --- | --- |
-| 1 | 服务部署在**公网可访问**地址（建议 HTTPS） | ❌ 需部署，`localhost` 无法通过审核 |
-| 2 | `mcp.server.auth-token` 已配置非空预共享密钥 | ❌ 本地默认为空，部署时必须配置 |
+| 1 | 服务部署在**公网可访问**地址（建议 HTTPS） | ✅ 已部署：`https://connectivity-rugby-colleges-achievements.trycloudflare.com/mcp` |
+| 2 | `mcp.server.auth-token` 已配置非空预共享密钥 | ✅ 已配置（systemd 启动参数） |
 | 3 | `/mcp/tools` 调试端点已受同一密钥保护 | ✅ 已完成 |
-| 4 | 工具可被平台实际调用并返回合法结果 | ✅ 本地全链路冒烟通过，公网需复测 |
+| 4 | 工具可被平台实际调用并返回合法结果 | ✅ 公网全链路（health / 401 / initialize / tools/call）均已通过 |
 | 5 | 准备 1:1 Logo（<200KB，jpeg/jpg/png/gif） | ❌ 需设计提供 |
 | 6 | 联系方式（手机号 + 邮箱） | ❌ 需填写 |
 
@@ -28,12 +28,30 @@
 | 表单项 | 填写内容 |
 | --- | --- |
 | 英文名称 | `xin-test-mcp` |
-| URL | `http://62.234.131.142/mcp` |
+| URL | `https://connectivity-rugby-colleges-achievements.trycloudflare.com/mcp` |
 | 请求头（选填） | `Authorization=Bearer <预共享密钥>`（每行一个 key=value） |
 | 审核测试用鉴权参数（选填） | `<预共享密钥>`，与请求头一致，供平台审核时验证服务可用性 |
 | 平台调用鉴权参数（选填） | `<预共享密钥>`，供百度渠道分发调用使用 |
 
 > 兼容写法：若平台请求头不支持 `Authorization`，可使用 `X-MCP-Key=<预共享密钥>`，服务端两者均支持。
+
+### 为什么 URL 必须用 HTTPS 隧道地址
+
+实测结论（2026-11-17）：
+
+1. 提交 `http://62.234.131.142/mcp`（裸 IP + HTTP）时，表单报 **「URL格式不正确」**。前端只校验是否以 `http://`/`https://` 开头（已从页面 JS 反查确认），因此该提示来自**后端**校验，说明服务端要求域名 + HTTPS。
+2. 想用「域名 + Let's Encrypt」直接签发证书会失败：大陆轻量服务器上**未备案域名**在 80/443 会被腾讯云劫持到 `dnspod.qcloud.com/static/webblock.html`（实测任意端口同样被拦），ACME 的 HTTP-01 / TLS-ALPN-01 均无法通过。
+3. 因此采用 **Cloudflare Quick Tunnel**：由隧道出网到 Cloudflare 边缘，对外提供 `https://*.trycloudflare.com` 域名，源站无需公网端口与备案。
+
+隧道由 systemd 单元 `cf-mcp.service` 托管（`cloudflared tunnel --url http://127.0.0.1:9090`），进程常驻、异常自动重启。
+
+> ⚠️ Quick Tunnel 的域名在**进程重启后会变化**。若服务重启，需用下面的命令取新域名，并在 MCPWorld「My MCP」中修改后重新提交：
+>
+> ```bash
+> journalctl -u cf-mcp --no-pager | grep -oE 'https://[a-z0-9-]+\.trycloudflare\.com' | tail -1
+> ```
+>
+> 若长期使用，建议购买域名并完成 ICP 备案（大陆实例），或把服务迁到境外/香港实例，即可用自己的固定域名。
 
 ## 4. 服务详情栏（Markdown）
 
@@ -75,12 +93,12 @@
 预共享密钥（Pre-shared key）。平台调用时请携带上述请求头之一。
 
 ## 联调示例
-curl -X POST http://62.234.131.142/mcp \
+curl -X POST https://connectivity-rugby-colleges-achievements.trycloudflare.com/mcp \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"mcpworld","version":"1.0"}}}'
 
-curl -X POST http://62.234.131.142/mcp \
+curl -X POST https://connectivity-rugby-colleges-achievements.trycloudflare.com/mcp \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"download_file_unstructured","arguments":{"fileId":"F20261116001"}}}'
@@ -92,14 +110,14 @@ curl -X POST http://62.234.131.142/mcp \
 - **联系方式**：填写真实手机号 + 邮箱
 - **提交后**：在「My MCP」页查看审核状态；被驳回时点问号查看原因，修改后重提
 
-## 6. 提交前验证清单（已部署：北京轻量服务器 62.234.131.142）
+## 6. 提交前验证清单（已部署：北京轻量服务器 62.234.131.142 + Cloudflare 隧道）
 
 > 服务已部署并通过全部验证（2026-11-17）。预共享密钥保存在服务器
 > `/etc/systemd/system/xin-test-mcp.service` 的启动参数中（服务器 `/tmp/mcp_token.txt` 有副本，
 > 重启后以 systemd 单元为准）。**密钥不要提交到本公开仓库。**
 
 ```bash
-BASE=http://62.234.131.142
+BASE=https://connectivity-rugby-colleges-achievements.trycloudflare.com
 TOKEN=<预共享密钥>
 
 # 1. 探活

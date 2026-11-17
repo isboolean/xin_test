@@ -59,7 +59,7 @@ Streamable HTTP 传输与预共享密钥鉴权。**完整的表单填写内容�
 {
   "name": "xin-test-mcp",
   "transport": "streamable-http",
-  "url": "http://62.234.131.142/mcp",
+  "url": "https://connectivity-rugby-colleges-achievements.trycloudflare.com/mcp",
   "headers": { "Authorization": "Bearer <预共享密钥>" },
   "tools": ["download_file_unstructured"]
 }
