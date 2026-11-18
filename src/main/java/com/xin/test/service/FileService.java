@@ -8,7 +8,7 @@ import com.xin.test.dto.FileContentDTO;
 public interface FileService {
 
     /**
-     * 按文件编号获取文件内容（当前为 mock 数据，后续对接真实非结构化存储）
+     * 按文件编号获取文件内容（元数据由服务层从上游 fileType/fileName 归一化）
      *
      * @param fileNo 文件编号
      * @return 文件二进制内容

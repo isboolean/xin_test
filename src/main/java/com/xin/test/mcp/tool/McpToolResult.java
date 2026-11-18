@@ -1,5 +1,7 @@
 package com.xin.test.mcp.tool;
 
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.LinkedHashMap;
@@ -11,6 +13,7 @@ import java.util.Map;
  * <p>
  * 结构遵循 MCP 规范：content[] + structuredContent + isError
  */
+@Getter
 public class McpToolResult {
 
     private final List<Map<String, Object>> content = new ArrayList<>();
@@ -22,7 +25,7 @@ public class McpToolResult {
     }
 
     /**
-     * 追加嵌入式资源内容（PDF 以 Base64 blob 返回）
+     * 追加嵌入式资源内容（文件字节以 Base64 blob 返回）
      */
     public McpToolResult embedResource(String uri, String mimeType, byte[] data) {
         Map<String, Object> resource = new LinkedHashMap<>();
@@ -56,10 +59,6 @@ public class McpToolResult {
     public McpToolResult error(boolean error) {
         this.error = error;
         return this;
-    }
-
-    public boolean isError() {
-        return error;
     }
 
     public Map<String, Object> toMap() {

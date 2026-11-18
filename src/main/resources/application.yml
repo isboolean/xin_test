@@ -30,7 +30,7 @@ mcp:
     auth-token: ""
     # 单文件大小上限：10MB
     max-file-size-bytes: 10485760
-    default-mime-type: application/pdf
+    default-mime-type: application/octet-stream
 
 logging:
   level:

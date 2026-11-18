@@ -20,7 +20,7 @@
 | 表单项 | 填写内容 |
 | --- | --- |
 | 名称（英文，字母/数字/中划线，≤30 字符） | `xin-test-mcp` |
-| 功能描述（禁止 Emoji） | 按文件标识下载业务系统中的非结构化文件（PDF），以嵌入式资源返回文件内容与元数据，供大模型读取和分析文件。 |
+| 功能描述（禁止 Emoji） | 按文件标识下载业务系统中的非结构化文件（支持 PDF / Word / Excel / 图片 / 文本等），以嵌入式资源返回文件内容与元数据，供大模型读取和分析文件。 |
 | 分发范围 | 首次建议选「在 MCP 广场展示」；接入真实文件服务后再考虑百度搜索等场景 |
 
 ## 3. 配置栏（类型：流式传输的 HTTP / Streamable HTTP）
@@ -60,11 +60,11 @@
 
 ## 产品定位
 面向 Agent / 大模型场景的非结构化文件下载服务：按 fileId 读取业务系统中的
-非结构化文件（PDF），以 MCP 嵌入式资源（Base64 blob）返回文件内容与元数据，
+非结构化文件（类型由 fileType 映射为 MIME），以 MCP 嵌入式资源（Base64 blob）返回文件内容与元数据，
 供模型读取、理解并完成后续任务（如智能填单）。
 
 ## 核心功能
-- 按文件标识下载非结构化文件，返回内容（Base64 PDF）与元数据（文件名、大小、MIME）
+- 按文件标识下载非结构化文件，返回内容（Base64 编码的文件字节）与元数据（文件名、大小、MIME）
 - 支持 MCP Streamable HTTP 传输（JSON-RPC 2.0），协议版本 2024-11-05 ~ 2025-11-25
 - 支持平台上下文 Header 透传：Agent-Tenant-Id / Agent-Id / Agent-User-Id /
   Agent-Session-Id / Agent-Run-Id
@@ -73,12 +73,12 @@
 ## 工具列表
 
 ### download_file_unstructured
-按 fileId 从业务系统非结构化文件服务读取文件（PDF）。
+按 fileId 从业务系统非结构化文件服务读取文件（支持多类型，本地示例为 DOCX）。
 
 - 入参（JSON Schema）：
   - fileId（string，必填，1~128 字符）：非结构化文件标识，例如 F20261116001
 - 返回：
-  - content：嵌入式资源 `{ type: "resource", resource: { uri, mimeType: "application/pdf", blob: base64 } }`
+  - content：嵌入式资源 `{ type: "resource", resource: { uri, mimeType: 由 fileType 映射（未知类型为 application/octet-stream）, blob: base64 } }`
   - structuredContent：`{ fileId, mimeType, sizeBytes, fileName }`
 - 失败时 `isError: true`，errorCode：INVALID_ARGUMENT / FILE_EMPTY / FILE_TOO_LARGE / DOWNLOAD_FAILED
 - 特性：只读、幂等、不遍历目录、不返回文件列表

@@ -151,7 +151,7 @@ public class McpProtocolHandler {
         result.put("protocolVersion", protocolVersion);
         result.put("capabilities", capabilities);
         result.put("serverInfo", serverInfo);
-        result.put("instructions", "按 fileId 提供非结构化文件下载能力，供 PDF 识别类 Agent 调用。");
+        result.put("instructions", "按 fileId 提供非结构化文件下载能力，供文档解析类 Agent 调用。");
         return result;
     }
 

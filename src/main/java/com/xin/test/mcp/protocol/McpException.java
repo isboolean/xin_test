@@ -1,8 +1,11 @@
 package com.xin.test.mcp.protocol;
 
+import lombok.Getter;
+
 /**
  * 协议层异常，对应 JSON-RPC error 对象
  */
+@Getter
 public class McpException extends RuntimeException {
 
     private final int code;
@@ -10,10 +13,6 @@ public class McpException extends RuntimeException {
     public McpException(int code, String message) {
         super(message);
         this.code = code;
-    }
-
-    public int getCode() {
-        return code;
     }
 
     public static McpException invalidParams(String message) {

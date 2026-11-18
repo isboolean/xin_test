@@ -11,14 +11,14 @@ mvn spring-boot:run
 mvn clean package -DskipTests && java -jar target/xin_test-1.0.0-SNAPSHOT.jar
 ```
 
-数据库为可选依赖：`sql/init.sql` 建库建表后按 `application.yml` 配置即可；数据库不可用时
-`FileServiceImpl` 自动降级为纯 mock 元数据，不影响下载能力。
+数据库为可选依赖（`sql/init.sql` + `application.yml`），仅用于演示 MyBatis 链路；
+下载链路的元数据来自文件系统接口返回的 `fileType` / `fileName`，不依赖数据库。
 
 ## 2. 业务 REST 接口
 
 | 方法 | 路径 | 说明 |
 | --- | --- | --- |
-| GET | `/api/file/download?fileNo=F20261116001` | 返回 `byte[]`，内容为结构合法的 mock PDF |
+| GET | `/api/file/download?fileNo=F20261116001` | 返回 `byte[]`；本地示例为内置 DOCX，线上由文件系统接口返回任意类型文件 |
 | GET | `/mcp/health` | 健康检查（免鉴权），返回服务名、版本、传输类型 |
 | GET | `/mcp/tools` | 调试用：查看已注册 MCP 工具与 Schema；鉴权策略与 `POST /mcp` 一致（`mcp.server.auth-token` 非空时必须携带密钥） |
 
@@ -37,11 +37,14 @@ mvn clean package -DskipTests && java -jar target/xin_test-1.0.0-SNAPSHOT.jar
 | --- | --- |
 | name | `download_file_unstructured` |
 | 入参 | `{ "fileId": "F20261116001" }`（必填，等同业务 `fileNo`，长度 1~128） |
-| content | 嵌入式资源：`{ type: "resource", resource: { uri, mimeType: "application/pdf", blob: base64 } }` |
+| content | 嵌入式资源：`{ type: "resource", resource: { uri, mimeType: 由 fileType 映射，未知类型为 application/octet-stream, blob: base64 } }` |
 | structuredContent | `{ fileId, mimeType, sizeBytes, fileName }` |
 | 失败 | `isError: true` + `structuredContent.errorCode`：`INVALID_ARGUMENT` / `FILE_EMPTY` / `FILE_TOO_LARGE` / `DOWNLOAD_FAILED` |
 
-工具实现直接复用业务下载能力 `FileService#downloadFileDetail`（当前为 mock PDF 生成），未调用外部服务。
+工具实现复用业务下载能力 `FileService#downloadFileDetail`。线上文件系统接口返回
+`byte[] + fileType + fileName`，服务层用 `MimeTypeResolver` 把扩展名映射为 MIME、
+清洗文件名后组装 `FileContentDTO`。本地 `fetchRawFile` 为可运行占位实现，读取随应用打包的示例 DOCX
+`src/main/resources/file/decoration-cost-request.docx`；线上只需替换该取数方法，上层工具无需改动。
 
 ### 3.3 提交 MCPWorld
 
@@ -84,7 +87,7 @@ curl -s -X POST http://localhost:8080/mcp -H 'Content-Type: application/json' \
 ```
 src/main/java/com/xin/test
 ├── controller      业务 HTTP 接口
-├── service         业务服务（含 mock PDF 生成）
+├── service         业务服务（上游取数 + 类型映射，线上替换 fetchRawFile）
 ├── mapper          MyBatis Mapper
 ├── dto / vo / entity
 ├── mcp
@@ -93,5 +96,5 @@ src/main/java/com/xin/test
 │   ├── tool        McpTool 契约、注册中心、download_file_unstructured 实现
 │   ├── context     Agent 平台上下文 Header 传递
 │   └── util        JSON 工具
-└── util            mock PDF 构造器
+└── util            MimeTypeResolver（扩展名→MIME、文件名清洗）；MockPdfBuilder 为历史遗留
 ```

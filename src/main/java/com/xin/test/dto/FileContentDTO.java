@@ -1,55 +1,28 @@
 package com.xin.test.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 /**
  * 文件内容 DTO（二进制内容 + 元数据）
  */
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class FileContentDTO {
 
     private String fileNo;
     private String fileName;
     private String mimeType;
+    /** 归一化扩展名（不带点），供文件名兜底使用 */
+    private String fileType;
     private byte[] content;
 
-    public FileContentDTO() {
-    }
-
     public FileContentDTO(String fileNo, String fileName, String mimeType, byte[] content) {
-        this.fileNo = fileNo;
-        this.fileName = fileName;
-        this.mimeType = mimeType;
-        this.content = content;
-    }
-
-    public String getFileNo() {
-        return fileNo;
-    }
-
-    public void setFileNo(String fileNo) {
-        this.fileNo = fileNo;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
+        this(fileNo, fileName, mimeType, null, content);
     }
 
     public long getSizeBytes() {

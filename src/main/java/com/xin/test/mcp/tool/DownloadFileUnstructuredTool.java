@@ -5,6 +5,7 @@ import com.xin.test.mcp.McpServerProperties;
 import com.xin.test.mcp.context.McpCallContext;
 import com.xin.test.mcp.context.McpCallContextHolder;
 import com.xin.test.service.FileService;
+import com.xin.test.util.MimeTypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,7 @@ import java.util.Map;
 /**
  * MCP 工具：download_file_unstructured
  * <p>
- * 按 fileId 调用业务系统现有下载能力（FileService#downloadFileDetail），把非结构化文件（PDF）
+ * 按 fileId 调用业务系统现有下载能力（FileService#downloadFileDetail），把非结构化文件
  * 以 MCP 嵌入式资源（Base64 blob）返回，供 Agent 运行时解码后交给模型读取。
  */
 @Component
@@ -49,8 +50,8 @@ public class DownloadFileUnstructuredTool implements McpTool {
 
     @Override
     public String description() {
-        return "按 fileId 从业务系统非结构化文件服务读取文件（PDF），返回文件内容与元数据。"
-                + "内容以嵌入式资源返回，mimeType 通常为 application/pdf，blob 为 Base64 编码。"
+        return "按 fileId 从业务系统非结构化文件服务读取文件（支持 PDF / Word / Excel / 图片 / 文本等），返回文件内容与元数据。"
+                + "内容以嵌入式资源返回，mimeType 由文件类型映射得到（未知类型为 application/octet-stream），blob 为 Base64 编码。"
                 + "仅处理本次请求指定的文件 ID，不遍历目录、不返回文件列表。";
     }
 
@@ -118,7 +119,12 @@ public class DownloadFileUnstructuredTool implements McpTool {
             }
 
             String mimeType = isBlank(file.getMimeType()) ? properties.getDefaultMimeType() : file.getMimeType();
-            String fileName = isBlank(file.getFileName()) ? "mock_" + fileId + ".pdf" : file.getFileName();
+            String fallbackType = isBlank(file.getFileType())
+                    ? MimeTypeResolver.DEFAULT_EXTENSION
+                    : file.getFileType();
+            String fileName = isBlank(file.getFileName())
+                    ? fileId + "." + fallbackType
+                    : file.getFileName();
 
             Map<String, Object> structured = new LinkedHashMap<>();
             structured.put("fileId", fileId);

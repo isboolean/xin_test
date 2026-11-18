@@ -1,8 +1,13 @@
 package com.xin.test.vo;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * 文件下载信息 VO（文件元数据，二进制内容直接由 Controller 以 byte[] 输出）
  */
+@Getter
+@Setter
 public class FileDownloadVO {
 
     /** 文件编号 */
@@ -13,36 +18,4 @@ public class FileDownloadVO {
     private Long fileSize;
     /** 文件类型 */
     private String contentType;
-
-    public String getFileNo() {
-        return fileNo;
-    }
-
-    public void setFileNo(String fileNo) {
-        this.fileNo = fileNo;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public Long getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(Long fileSize) {
-        this.fileSize = fileSize;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
-    }
 }
