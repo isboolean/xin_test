@@ -1,6 +1,6 @@
 package com.xin.test.mcp;
 
-import com.xin.test.util.MimeTypeResolver;
+import com.xin.test.mcp.util.MimeTypeResolver;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;

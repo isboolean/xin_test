@@ -1,11 +1,11 @@
 package com.xin.test.mcp.tool;
 
-import com.xin.test.dto.FileContentDTO;
 import com.xin.test.mcp.McpServerProperties;
 import com.xin.test.mcp.context.McpCallContext;
 import com.xin.test.mcp.context.McpCallContextHolder;
-import com.xin.test.service.FileService;
-import com.xin.test.util.MimeTypeResolver;
+import com.xin.test.mcp.dto.FileContentDTO;
+import com.xin.test.mcp.service.McpFileDownloadService;
+import com.xin.test.mcp.util.MimeTypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * MCP 工具：download_file_unstructured
  * <p>
- * 按 fileId 调用业务系统现有下载能力（FileService#downloadFileDetail），把非结构化文件
+ * 按 fileId 调用 mcp 侧下载能力（McpFileDownloadService#downloadFileDetail），把非结构化文件
  * 以 MCP 嵌入式资源（Base64 blob）返回，供 Agent 运行时解码后交给模型读取。
  */
 @Component
@@ -30,11 +30,11 @@ public class DownloadFileUnstructuredTool implements McpTool {
 
     public static final String TOOL_NAME = "download_file_unstructured";
 
-    private final FileService fileService;
+    private final McpFileDownloadService downloadService;
     private final McpServerProperties properties;
 
-    public DownloadFileUnstructuredTool(FileService fileService, McpServerProperties properties) {
-        this.fileService = fileService;
+    public DownloadFileUnstructuredTool(McpFileDownloadService downloadService, McpServerProperties properties) {
+        this.downloadService = downloadService;
         this.properties = properties;
     }
 
@@ -109,7 +109,7 @@ public class DownloadFileUnstructuredTool implements McpTool {
 
         long start = System.currentTimeMillis();
         try {
-            FileContentDTO file = fileService.downloadFileDetail(fileId);
+            FileContentDTO file = downloadService.downloadFileDetail(fileId);
             if (file == null || file.getContent() == null || file.getContent().length == 0) {
                 return failure(fileId, "FILE_EMPTY", "文件内容为空，请补传后重试", context);
             }

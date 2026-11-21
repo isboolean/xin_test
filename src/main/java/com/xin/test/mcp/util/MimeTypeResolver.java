@@ -1,4 +1,4 @@
-package com.xin.test.util;
+package com.xin.test.mcp.util;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.MediaTypeFactory;

@@ -67,7 +67,7 @@ L15 }
 | 类 | 靠什么被创建 | 创建时需要什么 |
 |----|-------------|---------------|
 | `McpServerProperties` | `@Component` (L9) | 框架自动把 `application.yml` 里 `mcp.server.*` 的值填进去 |
-| `DownloadFileUnstructuredTool` | `@Component` (L25) | 需要 `FileService` 和 `McpServerProperties`，框架从容器里拿 |
+| `DownloadFileUnstructuredTool` | `@Component` (L25) | 需要 `McpFileDownloadService` 和 `McpServerProperties`，框架从容器里拿 |
 | `McpToolRegistry` | `@Component` (L14) | 需要 `List<McpTool>`——框架把所有 `McpTool` 实现塞进一个列表传进来 |
 | `McpProtocolHandler` | `@Component` (L29) | 需要 `McpToolRegistry` 和 `McpServerProperties` |
 | `McpController` | `@RestController` (L33，本质也是 `@Component`) | 需要 `McpProtocolHandler`、`McpToolRegistry`、`McpServerProperties` |
@@ -81,7 +81,7 @@ McpController ──需要──> McpProtocolHandler ──需要──> McpTool
                                ↓
                      McpServerProperties ← 读 application.yml
 
-McpToolRegistry ──收集──> DownloadFileUnstructuredTool ──需要──> FileService
+McpToolRegistry ──收集──> DownloadFileUnstructuredTool ──需要──> McpFileDownloadService
 ```
 
 **关键设计意图**：`McpToolRegistry` 的构造参数是 `List<McpTool>`（L19）。这是 Spring 的一个特性——当构造参数是一个接口列表时，框架会把容器里**所有**该接口的实现都收集进来。所以以后你新增一个工具，只要写一个类 `implements McpTool` 并加 `@Component`，它会自动出现在工具列表里，**不用改任何现有代码**。这就是"开闭原则"的体现。
@@ -757,17 +757,17 @@ L56     }
 L25 @Component
 L26 public class DownloadFileUnstructuredTool implements McpTool {
 L30     public static final String TOOL_NAME = "download_file_unstructured";
-L32     private final FileService fileService;
+L32     private final McpFileDownloadService downloadService;
 L33     private final McpServerProperties properties;
-L35     public DownloadFileUnstructuredTool(FileService fileService, McpServerProperties properties) {
-L36         this.fileService = fileService;
+L35     public DownloadFileUnstructuredTool(McpFileDownloadService downloadService, McpServerProperties properties) {
+L36         this.downloadService = downloadService;
 L37         this.properties = properties;
 L38     }
 ```
 
 - **L25**：`@Component` 让它成为 Bean，才会被 `McpToolRegistry` 的 `List<McpTool>` 收集到。**漏掉这个注解，工具就不会上线**——这是最常犯的错。
 - **L30**：工具名常量。用常量而不是字符串字面量，避免拼写错误。
-- **L32-L38**：注入业务服务和配置。两个依赖都是 `final`。
+- **L32-L38**：注入 mcp 侧下载服务 `McpFileDownloadService` 和配置。两个依赖都是 `final`。
 
 ```java
 L41-L43  name()        → 返回 TOOL_NAME
@@ -852,9 +852,9 @@ L107     }
 ```java
 L109     long start = System.currentTimeMillis();
 L110     try {
-L111         FileContentDTO file = fileService.downloadFileDetail(fileId);
+L111         FileContentDTO file = downloadService.downloadFileDetail(fileId);
 ```
-记录开始时间用于耗时统计，然后调业务服务。**这一步才真正读文件**（服务层把上游 `byte[] + fileType + fileName` 经 `MimeTypeResolver` 映射、清洗后组装为 `FileContentDTO`）。
+记录开始时间用于耗时统计，然后调 mcp 侧下载服务。**这一步才真正读文件**（mcp 服务层把上游 `byte[] + fileType + fileName` 经 `MimeTypeResolver` 映射、清洗后组装为 `FileContentDTO`）。
 
 ```java
 L112         if (file == null || file.getContent() == null || file.getContent().length == 0) {
@@ -1168,8 +1168,8 @@ A：项目是 JDK 8 + Spring Boot 2.4.3，Spring AI 要求 JDK 17 + Boot 3.x。�
 | Java 8 特性 | `default` 接口方法、Lambda、`Base64` 工具类 | 了解：`default` 方法是什么、Base64 是二进制转文本 |
 | Servlet API | `HttpServletResponse`（只用来 setHeader） | 不用深究：知道它是"HTTP 响应对象"就够 |
 | Maven / pom.xml | 管理依赖和构建 | 不用：本阶段不需要改 |
-| MyBatis / MySQL | 业务数据层 | 不用：招聘 MCP 实现时 `FileService` 是个接口，内部是 mock |
-| 项目其他包 | controller / service / mapper / dto / vo / entity | 不用：与 MCP 协议无关 |
+| MyBatis / MySQL | 业务数据层 | 不用：招聘 MCP 实现时下载是个接口方法，内部是 mock |
+| 项目其他包 | controller / service / mapper / vo / entity | 不用：与 MCP 协议无关 |
 
 **一句话学习路径**：先搞懂 `McpTool` 接口 → `McpToolRegistry` 收集 → `McpProtocolHandler.dispatch` 分发 → `McpController` 包 HTTP 这 4 步，其余都是细节补充。
 

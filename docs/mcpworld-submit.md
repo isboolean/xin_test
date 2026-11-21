@@ -20,7 +20,7 @@
 | 表单项 | 填写内容 |
 | --- | --- |
 | 名称（英文，字母/数字/中划线，≤30 字符） | `xin-test-mcp` |
-| 功能描述（禁止 Emoji） | 按文件标识下载业务系统中的非结构化文件（支持 PDF / Word / Excel / 图片 / 文本等），以嵌入式资源返回文件内容与元数据，供大模型读取和分析文件。 |
+| 功能描述（禁止 Emoji） | 按文件标识下载业务系统中的非结构化文件（支持 PDF / Word / Excel / 图片 / 文本等），以嵌入式资源返回文件内容与元数据；并提供 OCR 识别工具，把文件内容整理为文本行返回，供大模型直接理解。 |
 | 分发范围 | 首次建议选「在 MCP 广场展示」；接入真实文件服务后再考虑百度搜索等场景 |
 
 ## 3. 配置栏（类型：流式传输的 HTTP / Streamable HTTP）
@@ -73,7 +73,7 @@
 ## 工具列表
 
 ### download_file_unstructured
-按 fileId 从业务系统非结构化文件服务读取文件（支持多类型，本地示例为 DOCX）。
+按 fileId 从业务系统非结构化文件服务读取文件（支持多类型，本地示例为 PDF）。
 
 - 入参（JSON Schema）：
   - fileId（string，必填，1~128 字符）：非结构化文件标识，例如 F20261116001
@@ -82,6 +82,18 @@
   - structuredContent：`{ fileId, mimeType, sizeBytes, fileName }`
 - 失败时 `isError: true`，errorCode：INVALID_ARGUMENT / FILE_EMPTY / FILE_TOO_LARGE / DOWNLOAD_FAILED
 - 特性：只读、幂等、不遍历目录、不返回文件列表
+
+### ocr_recognize
+按 fileId 读取文件字节与 MIME 类型并调用 OCR 识别，返回整理后的文本行列表（当前为 mock 桩实现，不对接真实 OCR 服务）。
+
+- 入参（JSON Schema）：
+  - fileId（string，必填，1~128 字符）：非结构化文件标识，例如 F20261116001
+- 返回：
+  - content：`type: "text"`，文本行以换行拼接；空结果时给出「未识别到内容」提示
+  - structuredContent：`{ fileId, texts: List<String>, count }`；失败时附加 `errorCode` / `message`
+- `texts` 恒为字符串数组：入参非法、文件为空或识别异常时返回 `[]`，核心方法永不返回 null、永不抛异常
+- 失败时 `isError: true`，errorCode：INVALID_ARGUMENT / TEXT_EMPTY / OCR_FAILED
+- 特性：只读、幂等、不遍历目录、不返回原始二进制
 
 ## 配置信息
 - 传输方式：Streamable HTTP
@@ -102,6 +114,11 @@ curl -X POST https://connectivity-rugby-colleges-achievements.trycloudflare.com/
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer <token>" \
   -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"download_file_unstructured","arguments":{"fileId":"F20261116001"}}}'
+
+curl -X POST https://connectivity-rugby-colleges-achievements.trycloudflare.com/mcp \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <token>" \
+  -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"ocr_recognize","arguments":{"fileId":"F20261116001"}}}'
 ```
 
 ## 5. 其他栏
@@ -140,6 +157,9 @@ curl -s -X POST $BASE/mcp -H 'Content-Type: application/json' \
 curl -s -X POST $BASE/mcp -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $TOKEN" \
   -d '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"download_file_unstructured","arguments":{"fileId":"F20261116001"}}}'
+curl -s -X POST $BASE/mcp -H 'Content-Type: application/json' \
+  -H "Authorization: Bearer $TOKEN" \
+  -d '{"jsonrpc":"2.0","id":4,"method":"tools/call","params":{"name":"ocr_recognize","arguments":{"fileId":"F20261116001"}}}'
 
 # 5. 调试端点未带密钥应返回 401
 curl -s -o /dev/null -w "%{http_code}\n" $BASE/mcp/tools

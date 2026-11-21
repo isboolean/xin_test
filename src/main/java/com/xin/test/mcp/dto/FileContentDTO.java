@@ -1,4 +1,4 @@
-package com.xin.test.dto;
+package com.xin.test.mcp.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

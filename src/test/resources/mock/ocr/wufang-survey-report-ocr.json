@@ -1,0 +1,2382 @@
+{
+  "schemaVersion": "1.0",
+  "description": "五方踏勘报告 mock OCR 识别结果：识别文本与文本框坐标基于内置示例 PDF 提取，置信度为可复现的 mock 值。",
+  "source": {
+    "fileId": "F20261116001",
+    "fileName": "五方踏勘报告_模拟数据_修正版.pdf",
+    "mimeType": "application/pdf",
+    "pageCount": 6,
+    "pageSizePoints": {
+      "width": 841.89,
+      "height": 595.28
+    },
+    "coordinateSystem": "PDF 用户空间，原点为页面左上角，单位 point",
+    "bboxFields": [
+      "x",
+      "y",
+      "width",
+      "height"
+    ]
+  },
+  "pages": [
+    {
+      "pageNumber": 1,
+      "widthPoints": 841.89,
+      "heightPoints": 595.28,
+      "textLines": [
+        "详情",
+        "五方踏勘报告",
+        "基本勘察信息",
+        "* 勘察人员 周奔 * 勘察日期 2026-11-12",
+        "* 项目所属建筑（物业） 东湖物管 * 联系人 周奔",
+        "* 电话 15507176316",
+        "建设中 毛坯建筑 简单装修 二次装修 其他",
+        "新址目前状况其他描述 无",
+        "装修房屋建筑结构现状及改造",
+        "* 建筑物分类 多层（单层） 一类高层 二类高层 超高层 地下 其他",
+        "建筑物分类其他描述 无",
+        "* 建筑物性质 住宅楼 宾馆 办公楼 商场（卖场） 医院 展馆（体育馆） 综合楼 其他",
+        "建筑物性质其他描述 无",
+        "* 建筑物结构类型 钢+混凝土 砖混结构 钢结构 砖木结构 其他",
+        "建筑物结构类型其他描述 无",
+        "* 建筑物总楼层数（地上） * 建筑物总楼层数（地下） 1 10",
+        "* 地面建筑总高 * 租赁面积（项目所在项目） 123 ㎡ 32.5 m",
+        "* 项目所在项目层数 8 * 项目所在项目总层数 10",
+        "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 1 页 / 共 6 页"
+      ],
+      "blocks": [
+        {
+          "id": "p0001-b001",
+          "type": "body",
+          "text": "详情",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 30.28,
+            "y": 17.41,
+            "width": 15.41,
+            "height": 7.42
+          }
+        },
+        {
+          "id": "p0001-b002",
+          "type": "header",
+          "text": "五方踏勘报告",
+          "confidence": 0.95,
+          "bbox": {
+            "x": 60.79,
+            "y": 34.11,
+            "width": 70.55,
+            "height": 11.18
+          }
+        },
+        {
+          "id": "p0001-b003",
+          "type": "heading",
+          "text": "基本勘察信息",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.43,
+            "y": 78.76,
+            "width": 59.14,
+            "height": 9.28
+          }
+        },
+        {
+          "id": "p0001-b004",
+          "type": "body",
+          "text": "* 勘察人员 周奔 * 勘察日期 2026-11-12",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 136.68,
+            "y": 106.15,
+            "width": 431.8,
+            "height": 8.27
+          }
+        },
+        {
+          "id": "p0001-b005",
+          "type": "body",
+          "text": "* 项目所属建筑（物业） 东湖物管 * 联系人 周奔",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 85.68,
+            "y": 134.11,
+            "width": 456.51,
+            "height": 8.27
+          }
+        },
+        {
+          "id": "p0001-b006",
+          "type": "body",
+          "text": "* 电话 15507176316",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 161.68,
+            "y": 162.59,
+            "width": 89.52,
+            "height": 7.7
+          }
+        },
+        {
+          "id": "p0001-b007",
+          "type": "body",
+          "text": "建设中 毛坯建筑 简单装修 二次装修 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.33,
+            "y": 194.76,
+            "width": 255.8,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0001-b008",
+          "type": "body",
+          "text": "新址目前状况其他描述 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 103.3,
+            "y": 219.46,
+            "width": 107.98,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0001-b009",
+          "type": "heading",
+          "text": "装修房屋建筑结构现状及改造",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.7,
+            "y": 248.72,
+            "width": 128.99,
+            "height": 9.4
+          }
+        },
+        {
+          "id": "p0001-b010",
+          "type": "body",
+          "text": "* 建筑物分类",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 136.18,
+            "y": 277.0,
+            "width": 51.35,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0001-b011",
+          "type": "body",
+          "text": "多层（单层） 一类高层 二类高层 超高层 地下 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.76,
+            "y": 280.83,
+            "width": 317.37,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0001-b012",
+          "type": "body",
+          "text": "建筑物分类其他描述 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 111.83,
+            "y": 305.5,
+            "width": 99.45,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0001-b013",
+          "type": "body",
+          "text": "* 建筑物性质",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 136.18,
+            "y": 334.0,
+            "width": 51.29,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0001-b014",
+          "type": "body",
+          "text": "住宅楼 宾馆 办公楼 商场（卖场） 医院 展馆（体育馆） 综合楼 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.26,
+            "y": 337.76,
+            "width": 433.37,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0001-b015",
+          "type": "body",
+          "text": "建筑物性质其他描述 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 111.83,
+            "y": 362.5,
+            "width": 99.45,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0001-b016",
+          "type": "body",
+          "text": "* 建筑物结构类型",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 119.18,
+            "y": 391.0,
+            "width": 68.42,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0001-b017",
+          "type": "body",
+          "text": "钢+混凝土 砖混结构 钢结构 砖木结构 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.26,
+            "y": 394.8,
+            "width": 260.12,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0001-b018",
+          "type": "body",
+          "text": "建筑物结构类型其他描述 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 94.83,
+            "y": 419.5,
+            "width": 116.45,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0001-b019",
+          "type": "body",
+          "text": "* 建筑物总楼层数（地上）",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 77.18,
+            "y": 447.5,
+            "width": 97.7,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0001-b020",
+          "type": "body",
+          "text": "* 建筑物总楼层数（地下） 1",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 407.18,
+            "y": 447.5,
+            "width": 259.18,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0001-b021",
+          "type": "body",
+          "text": "10",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 309.39,
+            "y": 448.25,
+            "width": 7.59,
+            "height": 6.18
+          }
+        },
+        {
+          "id": "p0001-b022",
+          "type": "body",
+          "text": "* 地面建筑总高",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 119.68,
+            "y": 475.5,
+            "width": 59.76,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0001-b023",
+          "type": "body",
+          "text": "* 租赁面积（项目所在项目） 123 ㎡",
+          "confidence": 0.965,
+          "bbox": {
+            "x": 398.68,
+            "y": 475.53,
+            "width": 228.19,
+            "height": 7.85
+          }
+        },
+        {
+          "id": "p0001-b024",
+          "type": "body",
+          "text": "32.5",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 227.54,
+            "y": 476.21,
+            "width": 16.77,
+            "height": 6.12
+          }
+        },
+        {
+          "id": "p0001-b025",
+          "type": "body",
+          "text": "m",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 289.14,
+            "y": 478.8,
+            "width": 3.92,
+            "height": 3.78
+          }
+        },
+        {
+          "id": "p0001-b026",
+          "type": "body",
+          "text": "* 项目所在项目层数",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 102.68,
+            "y": 503.53,
+            "width": 76.82,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0001-b027",
+          "type": "body",
+          "text": "8 * 项目所在项目总层数 10",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 311.04,
+            "y": 503.53,
+            "width": 358.89,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0001-b028",
+          "type": "footer",
+          "text": "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 1 页 / 共 6 页",
+          "confidence": 0.94,
+          "bbox": {
+            "x": 30.5,
+            "y": 566.1,
+            "width": 780.81,
+            "height": 6.99
+          }
+        }
+      ]
+    },
+    {
+      "pageNumber": 2,
+      "widthPoints": 841.89,
+      "heightPoints": 595.28,
+      "textLines": [
+        "详情",
+        "五方踏勘报告",
+        "楼层租用面积 （㎡）楼层高度 （m）主梁底高度 （m）次梁底高度 （m）板底高度 （m）实测最低高度（m） 操作",
+        "8F 123.00 3.60 3.20 2.90 2.70 2.60 查看",
+        "9F 123.00 3.60 3.20 2.90 2.70 2.60 查看",
+        "10F 123.00 3.60 3.20 2.90 2.70 2.60 查看",
+        "* 区域内是否包含悬梁结构",
+        "悬梁结构位置 项目北侧梁下",
+        "*区域内是否包含楼梯结构 是，无需改动 是，需要改动 否，无需新建 否，需要新建",
+        "*区域内是否有地下室 没有全部 部分",
+        "地下室位置 地下一层东北角",
+        "装修房屋周围情况及改造",
+        "* 与相邻建筑分隔 砖墙分隔 玻璃墙分隔 轻钢龙骨墙 新砌砖墙 其他",
+        "建筑分隔（周围情况）其他 无",
+        "* 除主入口外是否有第二出入口",
+        "* 消防疏散通道及门",
+        "消防疏散通道预留位置 无",
+        "* 与相邻建筑分隔（卫生间）",
+        "新建卫生间位置描述 无",
+        "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 2 页 / 共 6 页"
+      ],
+      "blocks": [
+        {
+          "id": "p0002-b001",
+          "type": "body",
+          "text": "详情",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 30.28,
+            "y": 17.41,
+            "width": 15.41,
+            "height": 7.42
+          }
+        },
+        {
+          "id": "p0002-b002",
+          "type": "header",
+          "text": "五方踏勘报告",
+          "confidence": 0.95,
+          "bbox": {
+            "x": 60.79,
+            "y": 34.11,
+            "width": 70.55,
+            "height": 11.18
+          }
+        },
+        {
+          "id": "p0002-b003",
+          "type": "table_cell",
+          "text": "楼层租用面积",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 58.96,
+            "y": 77.38,
+            "width": 89.72,
+            "height": 13.54
+          },
+          "row": 0,
+          "column": 0
+        },
+        {
+          "id": "p0002-b004",
+          "type": "table_cell",
+          "text": "（㎡）楼层高度",
+          "confidence": 0.955,
+          "bbox": {
+            "x": 148.69,
+            "y": 77.38,
+            "width": 109.45,
+            "height": 13.54
+          },
+          "row": 0,
+          "column": 1
+        },
+        {
+          "id": "p0002-b005",
+          "type": "table_cell",
+          "text": "（m）主梁底高度",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 258.14,
+            "y": 77.38,
+            "width": 103.76,
+            "height": 13.54
+          },
+          "row": 0,
+          "column": 2
+        },
+        {
+          "id": "p0002-b006",
+          "type": "table_cell",
+          "text": "（m）次梁底高度",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 361.9,
+            "y": 77.38,
+            "width": 108.94,
+            "height": 13.54
+          },
+          "row": 0,
+          "column": 3
+        },
+        {
+          "id": "p0002-b007",
+          "type": "table_cell",
+          "text": "（m）板底高度",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 470.84,
+            "y": 77.38,
+            "width": 102.71,
+            "height": 13.54
+          },
+          "row": 0,
+          "column": 4
+        },
+        {
+          "id": "p0002-b008",
+          "type": "table_cell",
+          "text": "（m）实测最低高度（m）",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 573.55,
+            "y": 77.38,
+            "width": 199.2,
+            "height": 13.54
+          },
+          "row": 0,
+          "column": 5
+        },
+        {
+          "id": "p0002-b009",
+          "type": "table_cell",
+          "text": "操作",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 772.76,
+            "y": 77.38,
+            "width": 15.34,
+            "height": 13.54
+          },
+          "row": 0,
+          "column": 7
+        },
+        {
+          "id": "p0002-b010",
+          "type": "table_cell",
+          "text": "8F",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 58.96,
+            "y": 90.92,
+            "width": 89.72,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 0
+        },
+        {
+          "id": "p0002-b011",
+          "type": "table_cell",
+          "text": "123.00",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 148.69,
+            "y": 90.92,
+            "width": 109.45,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 1
+        },
+        {
+          "id": "p0002-b012",
+          "type": "table_cell",
+          "text": "3.60",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 258.14,
+            "y": 90.92,
+            "width": 103.76,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 2
+        },
+        {
+          "id": "p0002-b013",
+          "type": "table_cell",
+          "text": "3.20",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 361.9,
+            "y": 90.92,
+            "width": 108.94,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 3
+        },
+        {
+          "id": "p0002-b014",
+          "type": "table_cell",
+          "text": "2.90",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 470.84,
+            "y": 90.92,
+            "width": 102.71,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 4
+        },
+        {
+          "id": "p0002-b015",
+          "type": "table_cell",
+          "text": "2.70",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 573.55,
+            "y": 90.92,
+            "width": 107.96,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 5
+        },
+        {
+          "id": "p0002-b016",
+          "type": "table_cell",
+          "text": "2.60",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 681.51,
+            "y": 90.92,
+            "width": 91.25,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 6
+        },
+        {
+          "id": "p0002-b017",
+          "type": "table_cell",
+          "text": "查看",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 772.76,
+            "y": 90.92,
+            "width": 15.34,
+            "height": 19.22
+          },
+          "row": 1,
+          "column": 7
+        },
+        {
+          "id": "p0002-b018",
+          "type": "table_cell",
+          "text": "9F",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 58.96,
+            "y": 110.14,
+            "width": 89.72,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 0
+        },
+        {
+          "id": "p0002-b019",
+          "type": "table_cell",
+          "text": "123.00",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 148.69,
+            "y": 110.14,
+            "width": 109.45,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 1
+        },
+        {
+          "id": "p0002-b020",
+          "type": "table_cell",
+          "text": "3.60",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 258.14,
+            "y": 110.14,
+            "width": 103.76,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 2
+        },
+        {
+          "id": "p0002-b021",
+          "type": "table_cell",
+          "text": "3.20",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 361.9,
+            "y": 110.14,
+            "width": 108.94,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 3
+        },
+        {
+          "id": "p0002-b022",
+          "type": "table_cell",
+          "text": "2.90",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 470.84,
+            "y": 110.14,
+            "width": 102.71,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 4
+        },
+        {
+          "id": "p0002-b023",
+          "type": "table_cell",
+          "text": "2.70",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 573.55,
+            "y": 110.14,
+            "width": 107.96,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 5
+        },
+        {
+          "id": "p0002-b024",
+          "type": "table_cell",
+          "text": "2.60",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 681.51,
+            "y": 110.14,
+            "width": 91.25,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 6
+        },
+        {
+          "id": "p0002-b025",
+          "type": "table_cell",
+          "text": "查看",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 772.76,
+            "y": 110.14,
+            "width": 15.34,
+            "height": 19.0
+          },
+          "row": 2,
+          "column": 7
+        },
+        {
+          "id": "p0002-b026",
+          "type": "table_cell",
+          "text": "10F",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 58.96,
+            "y": 129.14,
+            "width": 89.72,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 0
+        },
+        {
+          "id": "p0002-b027",
+          "type": "table_cell",
+          "text": "123.00",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 148.69,
+            "y": 129.14,
+            "width": 109.45,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 1
+        },
+        {
+          "id": "p0002-b028",
+          "type": "table_cell",
+          "text": "3.60",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 258.14,
+            "y": 129.14,
+            "width": 103.76,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 2
+        },
+        {
+          "id": "p0002-b029",
+          "type": "table_cell",
+          "text": "3.20",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 361.9,
+            "y": 129.14,
+            "width": 108.94,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 3
+        },
+        {
+          "id": "p0002-b030",
+          "type": "table_cell",
+          "text": "2.90",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 470.84,
+            "y": 129.14,
+            "width": 102.71,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 4
+        },
+        {
+          "id": "p0002-b031",
+          "type": "table_cell",
+          "text": "2.70",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 573.55,
+            "y": 129.14,
+            "width": 107.96,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 5
+        },
+        {
+          "id": "p0002-b032",
+          "type": "table_cell",
+          "text": "2.60",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 681.51,
+            "y": 129.14,
+            "width": 91.25,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 6
+        },
+        {
+          "id": "p0002-b033",
+          "type": "table_cell",
+          "text": "查看",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 772.76,
+            "y": 129.14,
+            "width": 15.34,
+            "height": 13.17
+          },
+          "row": 3,
+          "column": 7
+        },
+        {
+          "id": "p0002-b034",
+          "type": "body",
+          "text": "* 区域内是否包含悬梁结构",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 85.18,
+            "y": 166.96,
+            "width": 102.32,
+            "height": 7.9
+          }
+        },
+        {
+          "id": "p0002-b035",
+          "type": "body",
+          "text": "悬梁结构位置 项目北侧梁下",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 137.33,
+            "y": 195.25,
+            "width": 117.89,
+            "height": 8.11
+          }
+        },
+        {
+          "id": "p0002-b036",
+          "type": "table_cell",
+          "text": "*区域内是否包含楼梯结构",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 85.18,
+            "y": 223.96,
+            "width": 110.25,
+            "height": 20.61
+          },
+          "row": 0,
+          "column": 0
+        },
+        {
+          "id": "p0002-b037",
+          "type": "table_cell",
+          "text": "是，无需改动",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 195.43,
+            "y": 223.96,
+            "width": 89.25,
+            "height": 20.61
+          },
+          "row": 0,
+          "column": 1
+        },
+        {
+          "id": "p0002-b038",
+          "type": "table_cell",
+          "text": "是，需要改动",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 284.68,
+            "y": 223.96,
+            "width": 73.25,
+            "height": 20.61
+          },
+          "row": 0,
+          "column": 2
+        },
+        {
+          "id": "p0002-b039",
+          "type": "body",
+          "text": "否，无需新建 否，需要新建",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 372.33,
+            "y": 227.8,
+            "width": 129.3,
+            "height": 8.29
+          }
+        },
+        {
+          "id": "p0002-b040",
+          "type": "table_cell",
+          "text": "*区域内是否有地下室",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 85.18,
+            "y": 244.57,
+            "width": 110.25,
+            "height": 28.33
+          },
+          "row": 1,
+          "column": 0
+        },
+        {
+          "id": "p0002-b041",
+          "type": "table_cell",
+          "text": "没有全部",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 195.43,
+            "y": 244.57,
+            "width": 89.25,
+            "height": 28.33
+          },
+          "row": 1,
+          "column": 1
+        },
+        {
+          "id": "p0002-b042",
+          "type": "table_cell",
+          "text": "部分",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 284.68,
+            "y": 244.57,
+            "width": 73.25,
+            "height": 28.33
+          },
+          "row": 1,
+          "column": 2
+        },
+        {
+          "id": "p0002-b043",
+          "type": "table_cell",
+          "text": "地下室位置",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 85.18,
+            "y": 272.9,
+            "width": 110.25,
+            "height": 16.45
+          },
+          "row": 2,
+          "column": 0
+        },
+        {
+          "id": "p0002-b044",
+          "type": "table_cell",
+          "text": "地下一层东北角",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 195.43,
+            "y": 272.9,
+            "width": 89.25,
+            "height": 16.45
+          },
+          "row": 2,
+          "column": 1
+        },
+        {
+          "id": "p0002-b045",
+          "type": "heading",
+          "text": "装修房屋周围情况及改造",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.7,
+            "y": 310.72,
+            "width": 108.99,
+            "height": 9.4
+          }
+        },
+        {
+          "id": "p0002-b046",
+          "type": "body",
+          "text": "* 与相邻建筑分隔",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 119.18,
+            "y": 338.96,
+            "width": 68.32,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0002-b047",
+          "type": "body",
+          "text": "砖墙分隔 玻璃墙分隔 轻钢龙骨墙 新砌砖墙 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.33,
+            "y": 342.8,
+            "width": 281.3,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0002-b048",
+          "type": "body",
+          "text": "建筑分隔（周围情况）其他 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 86.33,
+            "y": 367.5,
+            "width": 124.95,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0002-b049",
+          "type": "body",
+          "text": "* 除主入口外是否有第二出入口",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 68.18,
+            "y": 395.96,
+            "width": 118.53,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0002-b050",
+          "type": "body",
+          "text": "* 消防疏散通道及门",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 110.68,
+            "y": 424.96,
+            "width": 76.52,
+            "height": 7.99
+          }
+        },
+        {
+          "id": "p0002-b051",
+          "type": "body",
+          "text": "消防疏散通道预留位置 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 103.33,
+            "y": 453.5,
+            "width": 107.95,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0002-b052",
+          "type": "body",
+          "text": "* 与相邻建筑分隔（卫生间）",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 76.68,
+            "y": 481.96,
+            "width": 106.2,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0002-b053",
+          "type": "body",
+          "text": "新建卫生间位置描述 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 111.8,
+            "y": 510.46,
+            "width": 99.48,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0002-b054",
+          "type": "footer",
+          "text": "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 2 页 / 共 6 页",
+          "confidence": 0.94,
+          "bbox": {
+            "x": 30.5,
+            "y": 566.1,
+            "width": 780.81,
+            "height": 6.99
+          }
+        }
+      ]
+    },
+    {
+      "pageNumber": 3,
+      "widthPoints": 841.89,
+      "heightPoints": 595.28,
+      "textLines": [
+        "详情",
+        "五方踏勘报告",
+        "装修房屋外立面现状及改造",
+        "* 与相邻建筑分隔（外立面） 玻璃幕墙 金属幕墙 石材饰面 涂料 砖墙 其他",
+        "建筑分隔（外立面）其他 无",
+        "原有外立面可改动 原有外立面不可改动 主入口改动 否，不新设 其他",
+        "外立面改动权限其他 无",
+        "* 外立面是否有挑廊（挑檐） 无 有",
+        "挑廊（挑檐）进深尺寸 1200 mm 挑廊（挑檐）离地高度 3000 mm",
+        "* 新建招牌形式 横挑招牌 竖挑招牌 独立式招牌 置顶招牌 小型识别招牌 引路招牌 其他",
+        "招牌形式其他 无",
+        "*招牌灯光形式 内光源灯箱 外置光源 不需要光源",
+        "*入口处是否有台阶 无有",
+        "室内外高差 150 mm",
+        "* 残疾人坡道 既有残疾人坡道 无需新设 需新设",
+        "现场是否有条件新设 具备新设条件，坡道净宽 1.2 米，坡度 1:12",
+        "电气设施现状及改造",
+        "* 物业需提供需方电容量 111 kw",
+        "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 3 页 / 共 6 页"
+      ],
+      "blocks": [
+        {
+          "id": "p0003-b001",
+          "type": "body",
+          "text": "详情",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 30.28,
+            "y": 17.41,
+            "width": 15.41,
+            "height": 7.42
+          }
+        },
+        {
+          "id": "p0003-b002",
+          "type": "header",
+          "text": "五方踏勘报告",
+          "confidence": 0.95,
+          "bbox": {
+            "x": 60.79,
+            "y": 34.11,
+            "width": 70.55,
+            "height": 11.18
+          }
+        },
+        {
+          "id": "p0003-b003",
+          "type": "heading",
+          "text": "装修房屋外立面现状及改造",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.7,
+            "y": 78.72,
+            "width": 118.99,
+            "height": 9.4
+          }
+        },
+        {
+          "id": "p0003-b004",
+          "type": "body",
+          "text": "* 与相邻建筑分隔（外立面）",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 76.68,
+            "y": 106.96,
+            "width": 106.2,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0003-b005",
+          "type": "body",
+          "text": "玻璃幕墙 金属幕墙 石材饰面 涂料 砖墙 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.26,
+            "y": 110.8,
+            "width": 292.37,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0003-b006",
+          "type": "body",
+          "text": "建筑分隔（外立面）其他 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 94.83,
+            "y": 135.5,
+            "width": 116.45,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0003-b007",
+          "type": "body",
+          "text": "原有外立面可改动 原有外立面不可改动 主入口改动 否，不新设 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.37,
+            "y": 167.8,
+            "width": 357.77,
+            "height": 8.29
+          }
+        },
+        {
+          "id": "p0003-b008",
+          "type": "body",
+          "text": "外立面改动权限其他 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 111.76,
+            "y": 192.53,
+            "width": 99.52,
+            "height": 7.85
+          }
+        },
+        {
+          "id": "p0003-b009",
+          "type": "body",
+          "text": "* 外立面是否有挑廊（挑檐）",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 76.68,
+            "y": 221.0,
+            "width": 106.2,
+            "height": 7.86
+          }
+        },
+        {
+          "id": "p0003-b010",
+          "type": "body",
+          "text": "无 有",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 214.5,
+            "y": 224.86,
+            "width": 44.0,
+            "height": 7.79
+          }
+        },
+        {
+          "id": "p0003-b011",
+          "type": "body",
+          "text": "挑廊（挑檐）进深尺寸",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 95.26,
+            "y": 249.5,
+            "width": 84.21,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0003-b012",
+          "type": "body",
+          "text": "1200 mm 挑廊（挑檐）离地高度 3000 mm",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 227.99,
+            "y": 249.5,
+            "width": 399.31,
+            "height": 7.89
+          }
+        },
+        {
+          "id": "p0003-b013",
+          "type": "body",
+          "text": "* 新建招牌形式",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 127.68,
+            "y": 278.0,
+            "width": 59.99,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0003-b014",
+          "type": "body",
+          "text": "横挑招牌 竖挑招牌 独立式招牌 置顶招牌 小型识别招牌 引路招牌 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.23,
+            "y": 281.8,
+            "width": 413.91,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0003-b015",
+          "type": "body",
+          "text": "招牌形式其他 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 137.3,
+            "y": 306.5,
+            "width": 73.98,
+            "height": 7.86
+          }
+        },
+        {
+          "id": "p0003-b016",
+          "type": "table_cell",
+          "text": "*招牌灯光形式",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 110.68,
+            "y": 335.0,
+            "width": 90.5,
+            "height": 20.36
+          },
+          "row": 0,
+          "column": 0
+        },
+        {
+          "id": "p0003-b017",
+          "type": "table_cell",
+          "text": "内光源灯箱",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 201.18,
+            "y": 335.0,
+            "width": 70.5,
+            "height": 20.36
+          },
+          "row": 0,
+          "column": 1
+        },
+        {
+          "id": "p0003-b018",
+          "type": "table_cell",
+          "text": "外置光源",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 271.68,
+            "y": 335.0,
+            "width": 61.0,
+            "height": 20.36
+          },
+          "row": 0,
+          "column": 2
+        },
+        {
+          "id": "p0003-b019",
+          "type": "body",
+          "text": "不需要光源",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 346.93,
+            "y": 338.96,
+            "width": 41.77,
+            "height": 7.76
+          }
+        },
+        {
+          "id": "p0003-b020",
+          "type": "table_cell",
+          "text": "*入口处是否有台阶",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 110.68,
+            "y": 355.36,
+            "width": 90.5,
+            "height": 28.74
+          },
+          "row": 1,
+          "column": 0
+        },
+        {
+          "id": "p0003-b021",
+          "type": "table_cell",
+          "text": "无有",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 201.18,
+            "y": 355.36,
+            "width": 70.5,
+            "height": 28.74
+          },
+          "row": 1,
+          "column": 1
+        },
+        {
+          "id": "p0003-b022",
+          "type": "table_cell",
+          "text": "室内外高差",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 110.68,
+            "y": 384.09,
+            "width": 90.5,
+            "height": 16.23
+          },
+          "row": 2,
+          "column": 0
+        },
+        {
+          "id": "p0003-b023",
+          "type": "table_cell",
+          "text": "150",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 201.18,
+            "y": 384.09,
+            "width": 70.5,
+            "height": 16.23
+          },
+          "row": 2,
+          "column": 1
+        },
+        {
+          "id": "p0003-b024",
+          "type": "table_cell",
+          "text": "mm",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 271.68,
+            "y": 384.09,
+            "width": 61.0,
+            "height": 16.23
+          },
+          "row": 2,
+          "column": 2
+        },
+        {
+          "id": "p0003-b025",
+          "type": "body",
+          "text": "* 残疾人坡道",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 136.18,
+            "y": 421.0,
+            "width": 51.45,
+            "height": 8.13
+          }
+        },
+        {
+          "id": "p0003-b026",
+          "type": "body",
+          "text": "既有残疾人坡道 无需新设 需新设",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 214.73,
+            "y": 424.8,
+            "width": 173.94,
+            "height": 8.13
+          }
+        },
+        {
+          "id": "p0003-b027",
+          "type": "body",
+          "text": "现场是否有条件新设 具备新设条件，坡道净宽 1.2 米，坡度 1:12",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 111.83,
+            "y": 458.61,
+            "width": 266.65,
+            "height": 8.62
+          }
+        },
+        {
+          "id": "p0003-b028",
+          "type": "heading",
+          "text": "电气设施现状及改造",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 40.02,
+            "y": 497.68,
+            "width": 88.67,
+            "height": 9.36
+          }
+        },
+        {
+          "id": "p0003-b029",
+          "type": "body",
+          "text": "* 物业需提供需方电容量",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 93.68,
+            "y": 525.46,
+            "width": 93.79,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0003-b030",
+          "type": "body",
+          "text": "111",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 238.19,
+            "y": 526.28,
+            "width": 10.62,
+            "height": 5.91
+          }
+        },
+        {
+          "id": "p0003-b031",
+          "type": "body",
+          "text": "kw",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 297.5,
+            "y": 526.9,
+            "width": 7.83,
+            "height": 5.75
+          }
+        },
+        {
+          "id": "p0003-b032",
+          "type": "footer",
+          "text": "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 3 页 / 共 6 页",
+          "confidence": 0.94,
+          "bbox": {
+            "x": 30.5,
+            "y": 566.1,
+            "width": 780.81,
+            "height": 6.99
+          }
+        }
+      ]
+    },
+    {
+      "pageNumber": 4,
+      "widthPoints": 841.89,
+      "heightPoints": 595.28,
+      "textLines": [
+        "详情",
+        "五方踏勘报告",
+        "* 几路进线 2",
+        "* 电容量是否扩容 不需扩容 需扩容",
+        "扩容量 30 kw",
+        "* 电源提供方式",
+        "* 配电箱状况",
+        "* 配电箱个数 2",
+        "箱内总开关1 施耐德 NSX250N 3P 200A",
+        "箱内总开关2 施耐德 NSX160N 3P 125A",
+        "箱内总开关3 施耐德 iC65N 3P 63A",
+        "箱体位置描述 一层东侧弱电间内，靠北墙安装",
+        "电缆预估长度 35 m",
+        "配电箱照片 WF-20261112-EL-01.jpg",
+        "给排水设施",
+        "* 供水点位置 一层东侧管井内",
+        "* 供水管径 DN32 DN40 DN50 DN65 其他",
+        "其他管径 无",
+        "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 4 页 / 共 6 页"
+      ],
+      "blocks": [
+        {
+          "id": "p0004-b001",
+          "type": "body",
+          "text": "详情",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 30.28,
+            "y": 17.41,
+            "width": 15.41,
+            "height": 7.42
+          }
+        },
+        {
+          "id": "p0004-b002",
+          "type": "header",
+          "text": "五方踏勘报告",
+          "confidence": 0.95,
+          "bbox": {
+            "x": 60.79,
+            "y": 34.11,
+            "width": 70.55,
+            "height": 11.18
+          }
+        },
+        {
+          "id": "p0004-b003",
+          "type": "body",
+          "text": "* 几路进线 2",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 144.68,
+            "y": 77.56,
+            "width": 361.95,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0004-b004",
+          "type": "body",
+          "text": "* 电容量是否扩容",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 119.18,
+            "y": 105.96,
+            "width": 68.42,
+            "height": 7.9
+          }
+        },
+        {
+          "id": "p0004-b005",
+          "type": "body",
+          "text": "不需扩容 需扩容",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 214.43,
+            "y": 109.76,
+            "width": 86.67,
+            "height": 7.9
+          }
+        },
+        {
+          "id": "p0004-b006",
+          "type": "body",
+          "text": "扩容量",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 162.8,
+            "y": 134.46,
+            "width": 24.68,
+            "height": 7.9
+          }
+        },
+        {
+          "id": "p0004-b007",
+          "type": "body",
+          "text": "30 kw",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 239.94,
+            "y": 135.21,
+            "width": 65.39,
+            "height": 6.43
+          }
+        },
+        {
+          "id": "p0004-b008",
+          "type": "body",
+          "text": "* 电源提供方式",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 127.68,
+            "y": 163.0,
+            "width": 59.99,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0004-b009",
+          "type": "body",
+          "text": "* 配电箱状况",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 136.18,
+            "y": 192.0,
+            "width": 51.49,
+            "height": 7.83
+          }
+        },
+        {
+          "id": "p0004-b010",
+          "type": "body",
+          "text": "* 配电箱个数 2",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 136.18,
+            "y": 220.5,
+            "width": 370.45,
+            "height": 7.86
+          }
+        },
+        {
+          "id": "p0004-b011",
+          "type": "body",
+          "text": "箱内总开关1 施耐德 NSX250N 3P 200A",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 141.58,
+            "y": 248.08,
+            "width": 158.04,
+            "height": 8.25
+          }
+        },
+        {
+          "id": "p0004-b012",
+          "type": "body",
+          "text": "箱内总开关2 施耐德 NSX160N 3P 125A",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 141.58,
+            "y": 276.08,
+            "width": 158.04,
+            "height": 8.25
+          }
+        },
+        {
+          "id": "p0004-b013",
+          "type": "body",
+          "text": "箱内总开关3 施耐德 iC65N 3P 63A",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 141.58,
+            "y": 304.08,
+            "width": 144.84,
+            "height": 8.25
+          }
+        },
+        {
+          "id": "p0004-b014",
+          "type": "body",
+          "text": "箱体位置描述 一层东侧弱电间内，靠北墙安装",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 137.33,
+            "y": 332.11,
+            "width": 188.29,
+            "height": 8.62
+          }
+        },
+        {
+          "id": "p0004-b015",
+          "type": "body",
+          "text": "电缆预估长度 35 m",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 137.87,
+            "y": 360.53,
+            "width": 163.19,
+            "height": 7.85
+          }
+        },
+        {
+          "id": "p0004-b016",
+          "type": "body",
+          "text": "配电箱照片 WF-20261112-EL-01.jpg",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 145.87,
+            "y": 388.5,
+            "width": 149.23,
+            "height": 8.0
+          }
+        },
+        {
+          "id": "p0004-b017",
+          "type": "heading",
+          "text": "给排水设施",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.51,
+            "y": 417.68,
+            "width": 49.02,
+            "height": 9.36
+          }
+        },
+        {
+          "id": "p0004-b018",
+          "type": "body",
+          "text": "* 供水点位置 一层东侧管井内",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 136.18,
+            "y": 445.11,
+            "width": 127.56,
+            "height": 8.27
+          }
+        },
+        {
+          "id": "p0004-b019",
+          "type": "body",
+          "text": "* 供水管径",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 144.68,
+            "y": 473.96,
+            "width": 42.89,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0004-b020",
+          "type": "body",
+          "text": "DN32 DN40 DN50 DN65 其他",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.37,
+            "y": 477.92,
+            "width": 196.27,
+            "height": 7.74
+          }
+        },
+        {
+          "id": "p0004-b021",
+          "type": "body",
+          "text": "其他管径 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 154.43,
+            "y": 502.46,
+            "width": 56.85,
+            "height": 7.9
+          }
+        },
+        {
+          "id": "p0004-b022",
+          "type": "footer",
+          "text": "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 4 页 / 共 6 页",
+          "confidence": 0.94,
+          "bbox": {
+            "x": 30.5,
+            "y": 566.1,
+            "width": 780.81,
+            "height": 6.99
+          }
+        }
+      ]
+    },
+    {
+      "pageNumber": 5,
+      "widthPoints": 841.89,
+      "heightPoints": 595.28,
+      "textLines": [
+        "详情",
+        "五方踏勘报告",
+        "* 排水排污条件",
+        "自行设置排水管道位置描述 无",
+        "消防设施",
+        "*喷淋系统 无有",
+        "*喷淋主管位置 不可移位 可移位",
+        "*消火栓现状 既有消火栓 无消火栓，需新建",
+        "* 消火栓是否可移位",
+        "* 消防报警系统设置",
+        "* 消防广播系统设置",
+        "* 消防排烟设施现状 无，不需新建 无，需新建 既有消防排烟设施",
+        "既有消防排烟设施描述 一层北侧排烟风管及排烟口",
+        "是否有泵房（泵房是否两路进水） 无",
+        "空调系统设置",
+        "* 冷凝管离地净高 2.8 m",
+        "* 空调系统现状",
+        "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 5 页 / 共 6 页"
+      ],
+      "blocks": [
+        {
+          "id": "p0005-b001",
+          "type": "body",
+          "text": "详情",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 30.28,
+            "y": 17.41,
+            "width": 15.41,
+            "height": 7.42
+          }
+        },
+        {
+          "id": "p0005-b002",
+          "type": "header",
+          "text": "五方踏勘报告",
+          "confidence": 0.95,
+          "bbox": {
+            "x": 60.79,
+            "y": 34.11,
+            "width": 70.55,
+            "height": 11.18
+          }
+        },
+        {
+          "id": "p0005-b003",
+          "type": "body",
+          "text": "* 排水排污条件",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 127.68,
+            "y": 77.96,
+            "width": 59.92,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0005-b004",
+          "type": "body",
+          "text": "自行设置排水管道位置描述 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 87.39,
+            "y": 106.46,
+            "width": 123.89,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0005-b005",
+          "type": "heading",
+          "text": "消防设施",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.39,
+            "y": 135.68,
+            "width": 39.14,
+            "height": 9.4
+          }
+        },
+        {
+          "id": "p0005-b006",
+          "type": "table_cell",
+          "text": "*喷淋系统",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 127.68,
+            "y": 164.0,
+            "width": 73.25,
+            "height": 20.31
+          },
+          "row": 0,
+          "column": 0
+        },
+        {
+          "id": "p0005-b007",
+          "type": "table_cell",
+          "text": "无有",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 200.93,
+            "y": 164.0,
+            "width": 66.5,
+            "height": 20.31
+          },
+          "row": 0,
+          "column": 1
+        },
+        {
+          "id": "p0005-b008",
+          "type": "table_cell",
+          "text": "*喷淋主管位置",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 127.68,
+            "y": 184.31,
+            "width": 73.25,
+            "height": 29.05
+          },
+          "row": 1,
+          "column": 0
+        },
+        {
+          "id": "p0005-b009",
+          "type": "table_cell",
+          "text": "不可移位",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 200.93,
+            "y": 184.31,
+            "width": 66.5,
+            "height": 29.05
+          },
+          "row": 1,
+          "column": 1
+        },
+        {
+          "id": "p0005-b010",
+          "type": "table_cell",
+          "text": "可移位",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 267.43,
+            "y": 184.31,
+            "width": 99.0,
+            "height": 29.05
+          },
+          "row": 1,
+          "column": 2
+        },
+        {
+          "id": "p0005-b011",
+          "type": "table_cell",
+          "text": "*消火栓现状",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 127.68,
+            "y": 213.36,
+            "width": 73.25,
+            "height": 20.73
+          },
+          "row": 2,
+          "column": 0
+        },
+        {
+          "id": "p0005-b012",
+          "type": "table_cell",
+          "text": "既有消火栓",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 200.93,
+            "y": 213.36,
+            "width": 66.5,
+            "height": 20.73
+          },
+          "row": 2,
+          "column": 1
+        },
+        {
+          "id": "p0005-b013",
+          "type": "table_cell",
+          "text": "无消火栓，需新建",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 267.43,
+            "y": 213.36,
+            "width": 99.0,
+            "height": 20.73
+          },
+          "row": 2,
+          "column": 2
+        },
+        {
+          "id": "p0005-b014",
+          "type": "body",
+          "text": "* 消火栓是否可移位",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 110.68,
+            "y": 279.03,
+            "width": 76.92,
+            "height": 7.85
+          }
+        },
+        {
+          "id": "p0005-b015",
+          "type": "body",
+          "text": "* 消防报警系统设置",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 110.68,
+            "y": 307.96,
+            "width": 76.82,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0005-b016",
+          "type": "body",
+          "text": "* 消防广播系统设置",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 110.68,
+            "y": 336.96,
+            "width": 76.82,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0005-b017",
+          "type": "body",
+          "text": "* 消防排烟设施现状",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 110.68,
+            "y": 365.93,
+            "width": 76.95,
+            "height": 7.99
+          }
+        },
+        {
+          "id": "p0005-b018",
+          "type": "body",
+          "text": "无，不需新建 无，需新建 既有消防排烟设施",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 214.5,
+            "y": 369.73,
+            "width": 216.6,
+            "height": 8.36
+          }
+        },
+        {
+          "id": "p0005-b019",
+          "type": "body",
+          "text": "既有消防排烟设施描述 一层北侧排烟风管及排烟口",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 103.73,
+            "y": 394.11,
+            "width": 203.53,
+            "height": 8.3
+          }
+        },
+        {
+          "id": "p0005-b020",
+          "type": "body",
+          "text": "是否有泵房（泵房是否两路进水） 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 61.0,
+            "y": 422.5,
+            "width": 150.28,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0005-b021",
+          "type": "heading",
+          "text": "空调系统设置",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.55,
+            "y": 451.72,
+            "width": 58.86,
+            "height": 9.36
+          }
+        },
+        {
+          "id": "p0005-b022",
+          "type": "body",
+          "text": "* 冷凝管离地净高",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 119.18,
+            "y": 479.46,
+            "width": 68.26,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0005-b023",
+          "type": "body",
+          "text": "2.8",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 237.67,
+            "y": 480.21,
+            "width": 12.48,
+            "height": 6.08
+          }
+        },
+        {
+          "id": "p0005-b024",
+          "type": "body",
+          "text": "m",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 297.14,
+            "y": 482.8,
+            "width": 3.92,
+            "height": 3.78
+          }
+        },
+        {
+          "id": "p0005-b025",
+          "type": "body",
+          "text": "* 空调系统现状",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 127.68,
+            "y": 507.96,
+            "width": 59.95,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0005-b026",
+          "type": "footer",
+          "text": "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 5 页 / 共 6 页",
+          "confidence": 0.94,
+          "bbox": {
+            "x": 30.5,
+            "y": 566.1,
+            "width": 780.81,
+            "height": 6.99
+          }
+        }
+      ]
+    },
+    {
+      "pageNumber": 6,
+      "widthPoints": 841.89,
+      "heightPoints": 595.28,
+      "textLines": [
+        "详情",
+        "五方踏勘报告",
+        "* 空调系统类型",
+        "* 新排风口在建筑物所处位置描述 新排风口位于建筑物北侧外墙",
+        "* 请写明旧机移机的型号和数量 旧机 2 台，型号 KFR-72LW",
+        "弱电系统建设",
+        "* 需新设弱电系统",
+        "其他弱电系统 无",
+        "现况对设计上的限制",
+        "* 现况对设计上的限制 无",
+        "* 机电设备对设计上的限制 无",
+        "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 6 页 / 共 6 页"
+      ],
+      "blocks": [
+        {
+          "id": "p0006-b001",
+          "type": "body",
+          "text": "详情",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 30.28,
+            "y": 17.41,
+            "width": 15.41,
+            "height": 7.42
+          }
+        },
+        {
+          "id": "p0006-b002",
+          "type": "header",
+          "text": "五方踏勘报告",
+          "confidence": 0.95,
+          "bbox": {
+            "x": 60.79,
+            "y": 34.11,
+            "width": 70.55,
+            "height": 11.18
+          }
+        },
+        {
+          "id": "p0006-b003",
+          "type": "body",
+          "text": "* 空调系统类型",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 127.68,
+            "y": 77.96,
+            "width": 59.92,
+            "height": 7.96
+          }
+        },
+        {
+          "id": "p0006-b004",
+          "type": "body",
+          "text": "* 新排风口在建筑物所处位置描述 新排风口位于建筑物北侧外墙",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 59.68,
+            "y": 162.65,
+            "width": 257.31,
+            "height": 8.27
+          }
+        },
+        {
+          "id": "p0006-b005",
+          "type": "body",
+          "text": "* 请写明旧机移机的型号和数量 旧机 2 台，型号 KFR-72LW",
+          "confidence": 0.96,
+          "bbox": {
+            "x": 68.18,
+            "y": 209.65,
+            "width": 240.24,
+            "height": 8.58
+          }
+        },
+        {
+          "id": "p0006-b006",
+          "type": "heading",
+          "text": "弱电系统建设",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.7,
+            "y": 248.76,
+            "width": 58.91,
+            "height": 9.32
+          }
+        },
+        {
+          "id": "p0006-b007",
+          "type": "body",
+          "text": "* 需新设弱电系统",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 119.18,
+            "y": 277.0,
+            "width": 68.49,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0006-b008",
+          "type": "body",
+          "text": "其他弱电系统 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 137.43,
+            "y": 305.5,
+            "width": 73.85,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0006-b009",
+          "type": "heading",
+          "text": "现况对设计上的限制",
+          "confidence": 0.99,
+          "bbox": {
+            "x": 39.39,
+            "y": 334.91,
+            "width": 88.79,
+            "height": 9.13
+          }
+        },
+        {
+          "id": "p0006-b010",
+          "type": "body",
+          "text": "* 现况对设计上的限制 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 102.18,
+            "y": 372.12,
+            "width": 109.1,
+            "height": 7.76
+          }
+        },
+        {
+          "id": "p0006-b011",
+          "type": "body",
+          "text": "* 机电设备对设计上的限制 无",
+          "confidence": 0.97,
+          "bbox": {
+            "x": 85.18,
+            "y": 418.96,
+            "width": 126.1,
+            "height": 7.92
+          }
+        },
+        {
+          "id": "p0006-b012",
+          "type": "footer",
+          "text": "五方踏勘报告 · 模拟数据（仅用于版式展示） 第 6 页 / 共 6 页",
+          "confidence": 0.94,
+          "bbox": {
+            "x": 30.5,
+            "y": 566.1,
+            "width": 780.81,
+            "height": 6.99
+          }
+        }
+      ]
+    }
+  ]
+}
