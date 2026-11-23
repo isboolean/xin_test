@@ -1,6 +1,7 @@
 package com.xin.test.mcp.service;
 
 import com.xin.test.mcp.dto.FileContentDTO;
+import com.xin.test.mcp.util.WordDataExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,23 +11,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
- * OCR 识别工具：按 fileId 读取文件字节与 MIME 类型，并把内置五方踏勘 PDF 的固定识别结果
- * 整理为 {@code List<String>} 返回。
+ * 文件内容识别工具：按 fileId 读取文件字节与 MIME 类型；下载完成后先按扩展名判断类型，
+ * {@code .doc}/{@code .docx}（不区分大小写）直接用 Apache POI 抽取段落与表格数据，
+ * 不转 PDF、不经过 OCR；其它类型保持原有直接识别流程。非 Word 的识别结果仍为内置
+ * 五方踏勘 PDF 的固定数据，统一整理为 {@code List<String>} 返回。
  *
  * <p>核心工具方法 {@link #recognize(String)} 的契约：
  * <ul>
  *   <li>返回类型恒为 {@code List<String>}，永不为 {@code null}、永不向调用方抛异常；</li>
  *   <li>入参校验失败（null / 空白 / 长度 &gt; 128）→ 返回空列表；</li>
- *   <li>取数失败、文件为空、识别异常、识别无结果 → 返回空列表，不降级返回原始字节；</li>
+ *   <li>取数失败、文件为空、Word 解析失败、识别异常、识别无结果 → 返回空列表，不降级返回原始字节；</li>
  *   <li>识别成功 → 返回按字段顺序整理的文本行列表。</li>
  * </ul>
  *
- * <p>{@code fileId → byte[] + mimeType → 固定识别结果 → List<String>} 的完整流程封装在
- * {@link #recognize(String)} 内部，上层无需感知取数与识别细节；识别结果取自内置
- * 五方踏勘 PDF 的固定字段数据，调用方式与返回结构保持不变。
+ * <p>{@code fileId → byte[] + mimeType →（doc/docx 走 POI 直抽 / 其它走 OCR 桩）→ List<String>}
+ * 的完整流程封装在 {@link #recognize(String)} 内部。Word 抽取为纯 Java 实现，
+ * 非 Word 的 OCR 具体实现仍为桩，调用方式与返回结构保持不变。
  */
 @Service
 public class OcrRecognizeService {
@@ -71,24 +75,36 @@ public class OcrRecognizeService {
                 return emptyResult();
             }
 
-            byte[] content = file.getContent();
-            String mimeType = file.getMimeType();
+            // 3. 下载完成后先判断类型：doc/docx 直接用 POI 抽数据，不转 PDF、不走 OCR
+            String extension = resolveExtension(file);
+            if (isWordExtension(extension)) {
+                List<String> extracted = extractWordText(file, extension);
+                if (extracted == null || extracted.isEmpty()) {
+                    log.warn("Word 数据抽取无结果，fileId={}, ext={}, fileName={}",
+                            normalized, extension, file.getFileName());
+                    return emptyResult();
+                }
+                log.info("Word 数据抽取完成，fileId={}, ext={}, fileName={}, lines={}, cost={}ms",
+                        normalized, extension, file.getFileName(), extracted.size(),
+                        System.currentTimeMillis() - start);
+                return extracted;
+            }
 
-            // 3. 返回内置五方踏勘 PDF 对应的固定识别数据（保持 List<String> 结构不变）
-            List<String> recognized = fixedRecognizedLines();
-
-            // 4. 防御性兜底：固定数据若返回 null / 空，仍保证恒为 List<String>
+            // 4. 非 Word 文件：保持原有直接识别流程（OCR 桩，当前返回固定数据）
+            List<String> recognized = recognizeByOcr(
+                    file.getContent(), file.getMimeType(), file.getFileName());
             if (recognized == null || recognized.isEmpty()) {
-                log.warn("OCR 无识别结果，fileId={}, mimeType={}", normalized, mimeType);
+                log.warn("OCR 无识别结果，fileId={}, mimeType={}, fileName={}",
+                        normalized, file.getMimeType(), file.getFileName());
                 return emptyResult();
             }
 
-            log.info("OCR 识别完成，fileId={}, mimeType={}, size={}B, lines={}, cost={}ms",
-                    normalized, mimeType, content.length, recognized.size(),
-                    System.currentTimeMillis() - start);
+            log.info("OCR 识别完成，fileId={}, fileName={}, mimeType={}, size={}B, lines={}, cost={}ms",
+                    normalized, file.getFileName(), file.getMimeType(), file.getContent().length,
+                    recognized.size(), System.currentTimeMillis() - start);
             return recognized;
         } catch (Exception e) {
-            // 取数 / 识别链路任意异常都不外抛，统一收敛为空列表
+            // 取数 / 解析 / 识别链路任意异常都不外抛，统一收敛为空列表
             log.error("OCR 识别失败，fileId={}, cost={}ms",
                     normalized, System.currentTimeMillis() - start, e);
             return emptyResult();
@@ -112,6 +128,49 @@ public class OcrRecognizeService {
         fields.put("识别正文", "项目名称：示例项目；踏勘地点：示例地点；参与单位：甲、乙、丙、丁、戊");
         fields.put("识别结论", "内容识别完成（mock 数据，未接入真实 OCR 服务）");
         return toLines(fields);
+    }
+
+    /**
+     * Word 数据抽取：doc/docx 直接用 POI 读段落与表格，不转 PDF、不经过 OCR。
+     * 包可见便于单测直接校验抽取结果。
+     */
+    List<String> extractWordText(FileContentDTO file, String extension) {
+        return WordDataExtractor.extract(file.getContent(), extension);
+    }
+
+    /** 判断是否 Word 文档扩展名，调用方已统一转小写。 */
+    private static boolean isWordExtension(String extension) {
+        return "doc".equals(extension) || "docx".equals(extension);
+    }
+
+    /** 取扩展名：fileType 优先，其次 fileName；统一小写并去掉前导点。 */
+    private static String resolveExtension(FileContentDTO file) {
+        String ext = trimLeadingDot(file.getFileType());
+        if (ext.isEmpty() && file.getFileName() != null) {
+            int dot = file.getFileName().lastIndexOf('.');
+            if (dot >= 0 && dot < file.getFileName().length() - 1) {
+                ext = trimLeadingDot(file.getFileName().substring(dot + 1));
+            }
+        }
+        return ext.toLowerCase(Locale.ROOT);
+    }
+
+    private static String trimLeadingDot(String value) {
+        if (value == null) {
+            return "";
+        }
+        String v = value.trim();
+        return v.startsWith(".") ? v.substring(1).trim() : v;
+    }
+
+    /**
+     * OCR 识别入口：仅处理非 Word 文件，content/fileName 为原始下载内容。
+     * 具体实现仍为桩，暂返回内置固定数据；接入真实 OCR 时只改此方法。
+     */
+    private List<String> recognizeByOcr(byte[] content, String mimeType, String fileName) {
+        log.debug("OCR 入参：fileName={}, mimeType={}, size={}B",
+                fileName, mimeType, content == null ? 0 : content.length);
+        return fixedRecognizedLines();
     }
 
     /**

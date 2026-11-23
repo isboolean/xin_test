@@ -56,6 +56,10 @@ mvn clean package -DskipTests && java -jar target/xin_test-1.0.0-SNAPSHOT.jar
 | structuredContent | `{ fileId, texts: List<String>, count }`；失败时附加 `errorCode` / `message` |
 | 失败 | `isError: true` + `errorCode`：`INVALID_ARGUMENT` / `TEXT_EMPTY` / `OCR_FAILED` |
 
+`recognize` 下载完成后先按扩展名判断：`.doc` / `.docx`（不区分大小写）直接用 **Apache POI 抽取段落与表格数据**（纯 Java，不转 PDF、不经过 OCR、无需外部程序）；其它类型保持原有直接识别流程，工具层无需改动。非 Word 的 OCR 实现本身仍是桩。
+
+Word 解析依赖 `poi` + `poi-ooxml` + `poi-scratchpad`（统一锁定 **5.0.0**，JDK 8 兼容）：`.docx` 走 XWPF，老式 `.doc` 走 HWPF，均能直接抽取段落与表格，无需外部程序、不转 PDF、不经过 OCR。解析异常按原契约收敛为空列表，不抛异常。
+
 `recognizeFile(byte[], String)` 当前为 mock 桩实现，返回模拟文本行，不对接真实 OCR 服务；线上只需替换它，上层方法签名不变。
 **`texts` 恒为字符串数组**：入参非法、文件为空、取数或识别异常时返回 `[]`；`recognize` 方法永不返回 `null`、永不抛异常。
 原始字节仍由 `download_file_unstructured` 提供，但该通道用于存档 / 转存，不直接交给大模型。

@@ -1,8 +1,12 @@
 package com.xin.test.mcp.service;
 
 import com.xin.test.mcp.dto.FileContentDTO;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.apache.poi.xwpf.usermodel.XWPFParagraph;
+import org.apache.poi.xwpf.usermodel.XWPFTable;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -104,5 +108,61 @@ class OcrRecognizeServiceTest {
         assertNotNull(result);
         assertFalse(result.isEmpty());
         assertTrue(result.stream().anyMatch(s -> s.contains("未知")));
+    }
+
+    @Test
+    void docxDataIsExtractedWithoutOcr() throws Exception {
+        byte[] docxBytes;
+        try (XWPFDocument doc = new XWPFDocument();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            XWPFParagraph paragraph = doc.createParagraph();
+            paragraph.createRun().setText("勘察人员：张三");
+            XWPFTable table = doc.createTable(1, 2);
+            table.getRow(0).getCell(0).setText("电话");
+            table.getRow(0).getCell(1).setText("13800000000");
+            doc.write(out);
+            docxBytes = out.toByteArray();
+        }
+
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-DOCX", "报告.DOCX",
+                "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "docx", docxBytes));
+
+        List<String> result = new OcrRecognizeService(stub).recognize("F-DOCX");
+
+        assertFalse(result.isEmpty());
+        assertTrue(result.stream().anyMatch(s -> s.contains("勘察人员：张三")));
+        assertTrue(result.stream().anyMatch(s -> s.contains("表格1 第1行 第2列: 13800000000")));
+        assertFalse(result.stream().anyMatch(s -> s.contains("模拟 OCR")));
+    }
+
+    @Test
+    void hwpfDependencyIsAvailableForLegacyDoc() throws Exception {
+        // 防止 poi-scratchpad 被误删后老式 .doc 静默降级为空
+        assertNotNull(Class.forName("org.apache.poi.hwpf.HWPFDocument"));
+    }
+
+    @Test
+    void invalidWordContentReturnsEmptyList() {
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-DOC", "报告.DOC", "application/msword", "doc", new byte[]{1, 2, 3}));
+
+        assertTrue(new OcrRecognizeService(stub).recognize("F-DOC").isEmpty());
+    }
+
+    @Test
+    void nonWordDocumentKeepsOriginalOcrFlow() {
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-PDF", "a.pdf", "application/pdf", "pdf", new byte[]{9, 9}));
+
+        List<String> result = new OcrRecognizeService(stub).recognize("F-PDF");
+
+        assertFalse(result.isEmpty());
+        assertTrue(result.stream().anyMatch(s -> s.contains("文件类型")));
+        assertFalse(result.stream().anyMatch(s -> s.contains("表格1")));
     }
 }
