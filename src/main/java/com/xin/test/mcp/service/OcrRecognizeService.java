@@ -1,6 +1,7 @@
 package com.xin.test.mcp.service;
 
 import com.xin.test.mcp.dto.FileContentDTO;
+import com.xin.test.mcp.util.ExcelDataExtractor;
 import com.xin.test.mcp.util.WordDataExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,21 +17,21 @@ import java.util.Map;
 
 /**
  * 文件内容识别工具：按 fileId 读取文件字节与 MIME 类型；下载完成后先按扩展名判断类型，
- * {@code .doc}/{@code .docx}（不区分大小写）直接用 Apache POI 抽取段落与表格数据，
- * 不转 PDF、不经过 OCR；其它类型保持原有直接识别流程。非 Word 的识别结果仍为内置
- * 五方踏勘 PDF 的固定数据，统一整理为 {@code List<String>} 返回。
+ * {@code .doc}/{@code .docx} 用 Apache POI 抽取段落与表格，{@code .xls}/{@code .xlsx}
+ * 用 POI 抽取工作表单元格，均不转 PDF、不经过 OCR；其它类型保持原有直接识别流程。
+ * 非 Word / Excel 的识别结果仍为内置五方踏勘 PDF 的固定数据，统一整理为 {@code List<String>} 返回。
  *
  * <p>核心工具方法 {@link #recognize(String)} 的契约：
  * <ul>
  *   <li>返回类型恒为 {@code List<String>}，永不为 {@code null}、永不向调用方抛异常；</li>
  *   <li>入参校验失败（null / 空白 / 长度 &gt; 128）→ 返回空列表；</li>
- *   <li>取数失败、文件为空、Word 解析失败、识别异常、识别无结果 → 返回空列表，不降级返回原始字节；</li>
+ *   <li>取数失败、文件为空、Word / Excel 解析失败、识别异常、识别无结果 → 返回空列表，不降级返回原始字节；</li>
  *   <li>识别成功 → 返回按字段顺序整理的文本行列表。</li>
  * </ul>
  *
- * <p>{@code fileId → byte[] + mimeType →（doc/docx 走 POI 直抽 / 其它走 OCR 桩）→ List<String>}
- * 的完整流程封装在 {@link #recognize(String)} 内部。Word 抽取为纯 Java 实现，
- * 非 Word 的 OCR 具体实现仍为桩，调用方式与返回结构保持不变。
+ * <p>{@code fileId → byte[] + mimeType →（doc/docx、xls/xlsx 走 POI 直抽 / 其它走 OCR 桩）→ List<String>}
+ * 的完整流程封装在 {@link #recognize(String)} 内部。Word / Excel 抽取为纯 Java 实现，
+ * 其余类型的 OCR 具体实现仍为桩，调用方式与返回结构保持不变。
  */
 @Service
 public class OcrRecognizeService {
@@ -75,7 +76,7 @@ public class OcrRecognizeService {
                 return emptyResult();
             }
 
-            // 3. 下载完成后先判断类型：doc/docx 直接用 POI 抽数据，不转 PDF、不走 OCR
+            // 3. 下载完成后先判断类型：doc/docx、xls/xlsx 直接用 POI 抽数据，不转 PDF、不走 OCR
             String extension = resolveExtension(file);
             if (isWordExtension(extension)) {
                 List<String> extracted = extractWordText(file, extension);
@@ -89,8 +90,20 @@ public class OcrRecognizeService {
                         System.currentTimeMillis() - start);
                 return extracted;
             }
+            if (isExcelExtension(extension)) {
+                List<String> extracted = extractExcelText(file, extension);
+                if (extracted == null || extracted.isEmpty()) {
+                    log.warn("Excel 数据抽取无结果，fileId={}, ext={}, fileName={}",
+                            normalized, extension, file.getFileName());
+                    return emptyResult();
+                }
+                log.info("Excel 数据抽取完成，fileId={}, ext={}, fileName={}, lines={}, cost={}ms",
+                        normalized, extension, file.getFileName(), extracted.size(),
+                        System.currentTimeMillis() - start);
+                return extracted;
+            }
 
-            // 4. 非 Word 文件：保持原有直接识别流程（OCR 桩，当前返回固定数据）
+            // 4. 其它类型文件：保持原有直接识别流程（OCR 桩，当前返回固定数据）
             List<String> recognized = recognizeByOcr(
                     file.getContent(), file.getMimeType(), file.getFileName());
             if (recognized == null || recognized.isEmpty()) {
@@ -138,9 +151,22 @@ public class OcrRecognizeService {
         return WordDataExtractor.extract(file.getContent(), extension);
     }
 
+    /**
+     * Excel 数据抽取：xls/xlsx 直接用 POI 读工作表单元格，不转 PDF、不经过 OCR。
+     * 包可见便于单测直接校验抽取结果。
+     */
+    List<String> extractExcelText(FileContentDTO file, String extension) {
+        return ExcelDataExtractor.extract(file.getContent(), extension);
+    }
+
     /** 判断是否 Word 文档扩展名，调用方已统一转小写。 */
     private static boolean isWordExtension(String extension) {
         return "doc".equals(extension) || "docx".equals(extension);
+    }
+
+    /** 判断是否 Excel 表格扩展名，调用方已统一转小写。 */
+    private static boolean isExcelExtension(String extension) {
+        return "xls".equals(extension) || "xlsx".equals(extension);
     }
 
     /** 取扩展名：fileType 优先，其次 fileName；统一小写并去掉前导点。 */
@@ -164,7 +190,7 @@ public class OcrRecognizeService {
     }
 
     /**
-     * OCR 识别入口：仅处理非 Word 文件，content/fileName 为原始下载内容。
+     * OCR 识别入口：仅处理非 Word / Excel 文件，content/fileName 为原始下载内容。
      * 具体实现仍为桩，暂返回内置固定数据；接入真实 OCR 时只改此方法。
      */
     private List<String> recognizeByOcr(byte[] content, String mimeType, String fileName) {

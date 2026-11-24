@@ -1,9 +1,12 @@
 package com.xin.test.mcp.service;
 
 import com.xin.test.mcp.dto.FileContentDTO;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -154,6 +157,64 @@ class OcrRecognizeServiceTest {
     }
 
     @Test
+    void xlsxDataIsExtractedWithoutOcr() throws Exception {
+        byte[] xlsxBytes;
+        try (XSSFWorkbook workbook = new XSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            Sheet sheet = workbook.createSheet("踏勘表");
+            sheet.createRow(0).createCell(0).setCellValue("联系人");
+            sheet.createRow(0).createCell(1).setCellValue("周奔");
+            workbook.write(out);
+            xlsxBytes = out.toByteArray();
+        }
+
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-XLSX", "报告.XLSX",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                null, xlsxBytes));
+
+        List<String> result = new OcrRecognizeService(stub).recognize("F-XLSX");
+
+        assertFalse(result.isEmpty());
+        assertTrue(result.stream().anyMatch(s -> s.contains("工作表1[踏勘表]")));
+        assertTrue(result.stream().anyMatch(s -> s.contains("第1行 第2列: 周奔")));
+        assertFalse(result.stream().anyMatch(s -> s.contains("模拟 OCR")));
+    }
+
+    @Test
+    void xlsDataIsExtractedWithoutOcr() throws Exception {
+        byte[] xlsBytes;
+        try (HSSFWorkbook workbook = new HSSFWorkbook();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            workbook.createSheet("老式表").createRow(0).createCell(0).setCellValue("旧格式数据");
+            workbook.write(out);
+            xlsBytes = out.toByteArray();
+        }
+
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-XLS", "数据.XLS", "application/vnd.ms-excel", "xls", xlsBytes));
+
+        List<String> result = new OcrRecognizeService(stub).recognize("F-XLS");
+
+        assertFalse(result.isEmpty());
+        assertTrue(result.stream().anyMatch(s -> s.contains("旧格式数据")));
+        assertFalse(result.stream().anyMatch(s -> s.contains("模拟 OCR")));
+    }
+
+    @Test
+    void invalidExcelContentReturnsEmptyList() {
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-BAD-XLSX", "坏表.xlsx",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "xlsx", new byte[]{1, 2, 3}));
+
+        assertTrue(new OcrRecognizeService(stub).recognize("F-BAD-XLSX").isEmpty());
+    }
+
+    @Test
     void nonWordDocumentKeepsOriginalOcrFlow() {
         McpFileDownloadService stub = mock(McpFileDownloadService.class);
         when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
@@ -164,5 +225,6 @@ class OcrRecognizeServiceTest {
         assertFalse(result.isEmpty());
         assertTrue(result.stream().anyMatch(s -> s.contains("文件类型")));
         assertFalse(result.stream().anyMatch(s -> s.contains("表格1")));
+        assertFalse(result.stream().anyMatch(s -> s.contains("工作表")));
     }
 }
