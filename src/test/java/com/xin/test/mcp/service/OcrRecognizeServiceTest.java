@@ -1,6 +1,8 @@
 package com.xin.test.mcp.service;
 
 import com.xin.test.mcp.dto.FileContentDTO;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
@@ -10,6 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -61,8 +64,9 @@ class OcrRecognizeServiceTest {
             assertNotNull(line);
             assertFalse(line.trim().isEmpty());
         }
-        assertTrue(result.stream().anyMatch(s -> s.contains("文件类型")));
-        assertTrue(result.stream().anyMatch(s -> s.contains("识别正文")));
+        // 内置 PDF 有文本层：走 PDFBox 直抽，返回真实文本（含页码分组标记）
+        assertTrue(result.stream().anyMatch(s -> s.contains("[第 1 页]")));
+        assertTrue(result.stream().anyMatch(s -> s.contains("五方踏勘报告")));
     }
 
     @Test
@@ -216,15 +220,81 @@ class OcrRecognizeServiceTest {
 
     @Test
     void nonWordDocumentKeepsOriginalOcrFlow() {
+        // 非 Word / Excel / PDF 类型：不进直抽分支，保持原有 OCR 流程（桩）
         McpFileDownloadService stub = mock(McpFileDownloadService.class);
         when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
-                "F-PDF", "a.pdf", "application/pdf", "pdf", new byte[]{9, 9}));
+                "F-PNG", "a.png", "image/png", "png", new byte[]{9, 9}));
 
-        List<String> result = new OcrRecognizeService(stub).recognize("F-PDF");
+        List<String> result = new OcrRecognizeService(stub).recognize("F-PNG");
 
         assertFalse(result.isEmpty());
         assertTrue(result.stream().anyMatch(s -> s.contains("文件类型")));
         assertFalse(result.stream().anyMatch(s -> s.contains("表格1")));
         assertFalse(result.stream().anyMatch(s -> s.contains("工作表")));
+    }
+
+    @Test
+    void pdfTextLayerIsExtractedDirectly() throws Exception {
+        // 有文本层的 PDF：PDFBox 逐页直抽，返回真实文本，不经过 OCR 桩
+        byte[] pdfBytes;
+        try (InputStream in = getClass()
+                .getResourceAsStream("/file/wufang-survey-report-fixed.pdf");
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            assertNotNull(in, "内置示例 PDF 应存在于 classpath");
+            byte[] buf = new byte[8192];
+            int n;
+            while ((n = in.read(buf)) != -1) {
+                out.write(buf, 0, n);
+            }
+            pdfBytes = out.toByteArray();
+        }
+
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-PDF", "a.pdf", "application/pdf", "pdf", pdfBytes));
+
+        List<String> result = new OcrRecognizeService(stub).recognize("F-PDF");
+
+        assertFalse(result.isEmpty());
+        assertTrue(result.stream().anyMatch(s -> s.contains("[第 1 页]")));
+        assertTrue(result.stream().anyMatch(s -> s.contains("[第 6 页]")));
+        assertTrue(result.stream().anyMatch(s -> s.contains("五方踏勘报告")));
+        // 直抽结果不应出现 OCR 桩固定字段
+        assertFalse(result.stream().anyMatch(s -> s.contains("识别标题")));
+    }
+
+    @Test
+    void scannedPdfFallsBackToOcrStub() throws Exception {
+        // 无文本层的扫描件 PDF：文本层抽取为空，回退 OCR 流程（当前为 mock 桩固定数据）
+        byte[] blankPdf;
+        try (PDDocument doc = new PDDocument();
+             ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            doc.addPage(new PDPage());
+            doc.save(out);
+            blankPdf = out.toByteArray();
+        }
+
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-SCAN", "scan.pdf", "application/pdf", "pdf", blankPdf));
+
+        List<String> result = new OcrRecognizeService(stub).recognize("F-SCAN");
+
+        assertFalse(result.isEmpty());
+        // 桩数据特征：识别标题字段
+        assertTrue(result.stream().anyMatch(s -> s.contains("识别标题")));
+    }
+
+    @Test
+    void corruptedPdfFallsBackToOcrStub() {
+        // 损坏 PDF：文本层解析失败（空列表），回退 OCR 流程
+        McpFileDownloadService stub = mock(McpFileDownloadService.class);
+        when(stub.downloadFileDetail(anyString())).thenReturn(new FileContentDTO(
+                "F-BAD", "bad.pdf", "application/pdf", "pdf", new byte[]{9, 9}));
+
+        List<String> result = new OcrRecognizeService(stub).recognize("F-BAD");
+
+        assertFalse(result.isEmpty());
+        assertTrue(result.stream().anyMatch(s -> s.contains("文件类型")));
     }
 }

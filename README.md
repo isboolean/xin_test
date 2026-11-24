@@ -52,15 +52,15 @@ mvn clean package -DskipTests && java -jar target/xin_test-1.0.0-SNAPSHOT.jar
 | --- | --- |
 | name | `ocr_recognize` |
 | 入参 | `{ "fileId": "F20261116001" }`（必填，1~128） |
-| 核心方法 | `OcrRecognizeService#recognize(String fileId)` → `List<String>`，封装 `fileId → byte[] + mimeType →（Word/Excel 按扩展名 POI 直抽 / 其它走 OCR 桩）→ 文本行` |
+| 核心方法 | `OcrRecognizeService#recognize(String fileId)` → `List<String>`，封装 `fileId → byte[] + mimeType →（Word/Excel 按扩展名 POI 直抽 / PDF 走 PDFBox 文本层直抽，扫描件回退 OCR / 其它走 OCR 桩）→ 文本行` |
 | structuredContent | `{ fileId, texts: List<String>, count }`；失败时附加 `errorCode` / `message` |
 | 失败 | `isError: true` + `errorCode`：`INVALID_ARGUMENT` / `TEXT_EMPTY` / `OCR_FAILED` |
 
-`recognize` 下载完成后先按扩展名判断：`.doc` / `.docx` 用 **Apache POI 抽取段落与表格数据**，`.xls` / `.xlsx` 用 POI **抽取工作表单元格**（均不区分大小写，纯 Java，不转 PDF、不经过 OCR、无需外部程序）；其它类型保持原有直接识别流程，工具层无需改动。非 Word / Excel 的 OCR 实现本身仍是桩。
+`recognize` 下载完成后先按扩展名判断：`.doc` / `.docx` 用 **Apache POI 抽取段落与表格数据**，`.xls` / `.xlsx` 用 POI **抽取工作表单元格**，`.pdf` 用 **Apache PDFBox 逐页抽取文本层**（输出按 `[第 N 页]` 分组，最多 50 页、30000 字符，超限追加截断提示行；均不区分大小写，纯 Java，不转图、不经过 OCR、无需外部程序）。PDF 无文本层（原件为扫描件）或解析失败时**回退 OCR 识别流程**，其它类型保持原有直接识别流程，工具层无需改动。OCR 实现本身仍是桩。
 
-解析依赖 `poi` + `poi-ooxml` + `poi-scratchpad`（统一锁定 **5.0.0**，JDK 8 兼容）：Word 中 `.docx` 走 XWPF、老式 `.doc` 走 HWPF；Excel 中 `.xlsx` 走 XSSF、`.xls` 走 HSSF，直接读取单元格，不转 PDF、不经过 OCR。Excel 输出按 `工作表N[名称] 第R行 第C列: 值` 组织（行列号从 1 开始），数值/日期按单元格格式渲染，公式先求值，合并单元格只保留左上角值；每张表最多 2000 行、每行最多 50 列，超限追加截断提示行，避免撑爆模型上下文。解析异常按原契约收敛为空列表，不抛异常。
+解析依赖 `poi` + `poi-ooxml` + `poi-scratchpad`（统一锁定 **5.0.0**，JDK 8 兼容）与 `pdfbox`（**2.0.22**，JDK 8 兼容；3.x 要求 JDK 11+，不可使用）：Word 中 `.docx` 走 XWPF、老式 `.doc` 走 HWPF；Excel 中 `.xlsx` 走 XSSF、`.xls` 走 HSSF，直接读取单元格，不转 PDF、不经过 OCR。PDF 逐页 `PDFTextStripper`（`setSortByPosition` 按版面排序）读文本层，页脚与空行剔除，单页失败不中断整份。Excel 输出按 `工作表N[名称] 第R行 第C列: 值` 组织（行列号从 1 开始），数值/日期按单元格格式渲染，公式先求值，合并单元格只保留左上角值；每张表最多 2000 行、每行最多 50 列，超限追加截断提示行，避免撑爆模型上下文。解析异常按原契约收敛为空列表，不抛异常。
 
-`recognizeFile(byte[], String)` 当前为 mock 桩实现，返回模拟文本行，不对接真实 OCR 服务；线上只需替换它，上层方法签名不变。
+PDF 无文本层（空列表信号）与其它非直抽类型的识别走 `recognizeByOcr()`：当前为 mock 桩实现，返回模拟文本行，不对接真实 OCR 服务；线上接入真实 OCR（渲染图片 + 逐页调用 + 按页拼接）只需替换该方法，上层签名不变。
 **`texts` 恒为字符串数组**：入参非法、文件为空、取数或识别异常时返回 `[]`；`recognize` 方法永不返回 `null`、永不抛异常。
 原始字节仍由 `download_file_unstructured` 提供，但该通道用于存档 / 转存，不直接交给大模型。
 
@@ -116,10 +116,11 @@ src/main/java/com/xin/test
 │   ├── transport   MCP 传输层（POST /mcp）
 │   ├── protocol    JSON-RPC 分发（initialize / tools/list / tools/call）
 │   ├── tool        McpTool 契约、注册中心、download_file_unstructured / ocr_recognize 实现
-│   ├── service     McpFileDownloadService（下载取数）、OcrRecognizeService（工具方法 + 扩展名分派 + recognizeFile 桩）
+│   ├── service     McpFileDownloadService（下载取数）、OcrRecognizeService（工具方法 + 扩展名分派 + OCR 桩）
 │   ├── context     Agent 平台上下文 Header 传递
 │   ├── dto         FileContentDTO / RawFileDTO（文件内容与上游报文）
 │   └── util        RawFileFetcher（上游取数）、MimeTypeResolver（扩展名→MIME、文件名清洗）、
-│                   WordDataExtractor（doc/docx 直抽）、ExcelDataExtractor（xls/xlsx 直抽）、JSON 工具
+│                   WordDataExtractor（doc/docx 直抽）、ExcelDataExtractor（xls/xlsx 直抽）、
+│                   PdfTextExtractor（pdf 文本层直抽）、JSON 工具
 └── util            MockPdfBuilder 为历史遗留
 ```

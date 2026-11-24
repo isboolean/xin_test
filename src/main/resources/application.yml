@@ -37,3 +37,4 @@ logging:
     com.xin.test.mapper: debug
     com.xin.test.mcp: info
     org.apache.poi: warn
+    org.apache.pdfbox: warn

@@ -2,6 +2,7 @@ package com.xin.test.mcp.service;
 
 import com.xin.test.mcp.dto.FileContentDTO;
 import com.xin.test.mcp.util.ExcelDataExtractor;
+import com.xin.test.mcp.util.PdfTextExtractor;
 import com.xin.test.mcp.util.WordDataExtractor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,20 +19,21 @@ import java.util.Map;
 /**
  * 文件内容识别工具：按 fileId 读取文件字节与 MIME 类型；下载完成后先按扩展名判断类型，
  * {@code .doc}/{@code .docx} 用 Apache POI 抽取段落与表格，{@code .xls}/{@code .xlsx}
- * 用 POI 抽取工作表单元格，均不转 PDF、不经过 OCR；其它类型保持原有直接识别流程。
- * 非 Word / Excel 的识别结果仍为内置五方踏勘 PDF 的固定数据，统一整理为 {@code List<String>} 返回。
+ * 用 POI 抽取工作表单元格，{@code .pdf} 用 PDFBox 逐页抽取文本层（均不转图、不经过 OCR）；
+ * PDF 无文本层（原件为扫描件）或解析失败时回退 OCR 识别流程，其它类型保持原有直接识别流程。
+ * 非直抽类型的识别结果仍为内置五方踏勘 PDF 的固定数据，统一整理为 {@code List<String>} 返回。
  *
  * <p>核心工具方法 {@link #recognize(String)} 的契约：
  * <ul>
  *   <li>返回类型恒为 {@code List<String>}，永不为 {@code null}、永不向调用方抛异常；</li>
  *   <li>入参校验失败（null / 空白 / 长度 &gt; 128）→ 返回空列表；</li>
- *   <li>取数失败、文件为空、Word / Excel 解析失败、识别异常、识别无结果 → 返回空列表，不降级返回原始字节；</li>
+ *   <li>取数失败、文件为空、Word / Excel / PDF 解析失败且无 OCR 兜底结果、识别异常、识别无结果 → 返回空列表，不降级返回原始字节；</li>
  *   <li>识别成功 → 返回按字段顺序整理的文本行列表。</li>
  * </ul>
  *
- * <p>{@code fileId → byte[] + mimeType →（doc/docx、xls/xlsx 走 POI 直抽 / 其它走 OCR 桩）→ List<String>}
- * 的完整流程封装在 {@link #recognize(String)} 内部。Word / Excel 抽取为纯 Java 实现，
- * 其余类型的 OCR 具体实现仍为桩，调用方式与返回结构保持不变。
+ * <p>{@code fileId → byte[] + mimeType →（doc/docx、xls/xlsx 走 POI 直抽 / pdf 走 PDFBox 文本层直抽，
+ * 扫描件回退与其它类型走 OCR 桩）→ List<String>} 的完整流程封装在 {@link #recognize(String)} 内部。
+ * Word / Excel / PDF 抽取为纯 Java 实现，OCR 具体实现仍为桩，调用方式与返回结构保持不变。
  */
 @Service
 public class OcrRecognizeService {
@@ -103,7 +105,20 @@ public class OcrRecognizeService {
                 return extracted;
             }
 
-            // 4. 其它类型文件：保持原有直接识别流程（OCR 桩，当前返回固定数据）
+            // 3.5 PDF：先抽文本层（有文本层的 PDF 无需 OCR）；为空（原件为扫描件 / 解析失败）时回退 OCR 流程
+            if (isPdfExtension(extension)) {
+                List<String> extracted = extractPdfText(file, extension);
+                if (extracted != null && !extracted.isEmpty()) {
+                    log.info("PDF 文本层抽取完成，fileId={}, ext={}, fileName={}, lines={}, cost={}ms",
+                            normalized, extension, file.getFileName(), extracted.size(),
+                            System.currentTimeMillis() - start);
+                    return extracted;
+                }
+                log.warn("PDF 无文本层（疑似扫描件或损坏），回退 OCR 识别，fileId={}, fileName={}",
+                        normalized, file.getFileName());
+            }
+
+            // 4. 其它类型文件 / PDF 扫描件回退：原有直接识别流程（OCR 桩，当前返回固定数据）
             List<String> recognized = recognizeByOcr(
                     file.getContent(), file.getMimeType(), file.getFileName());
             if (recognized == null || recognized.isEmpty()) {
@@ -159,6 +174,15 @@ public class OcrRecognizeService {
         return ExcelDataExtractor.extract(file.getContent(), extension);
     }
 
+    /**
+     * PDF 文本层抽取：pdf 直接用 PDFBox 逐页读文本层，不渲染图片、不经过 OCR；
+     * 无文本层（扫描件）或解析失败时返回空列表，由 recognize 回退 OCR 流程。
+     * 包可见便于单测直接校验抽取结果。
+     */
+    List<String> extractPdfText(FileContentDTO file, String extension) {
+        return PdfTextExtractor.extract(file.getContent());
+    }
+
     /** 判断是否 Word 文档扩展名，调用方已统一转小写。 */
     private static boolean isWordExtension(String extension) {
         return "doc".equals(extension) || "docx".equals(extension);
@@ -167,6 +191,11 @@ public class OcrRecognizeService {
     /** 判断是否 Excel 表格扩展名，调用方已统一转小写。 */
     private static boolean isExcelExtension(String extension) {
         return "xls".equals(extension) || "xlsx".equals(extension);
+    }
+
+    /** 判断是否 PDF 扩展名，调用方已统一转小写。 */
+    private static boolean isPdfExtension(String extension) {
+        return "pdf".equals(extension);
     }
 
     /** 取扩展名：fileType 优先，其次 fileName；统一小写并去掉前导点。 */
@@ -190,8 +219,9 @@ public class OcrRecognizeService {
     }
 
     /**
-     * OCR 识别入口：仅处理非 Word / Excel 文件，content/fileName 为原始下载内容。
-     * 具体实现仍为桩，暂返回内置固定数据；接入真实 OCR 时只改此方法。
+     * OCR 识别入口：处理非 Word / Excel / PDF 直抽文件，以及 PDF 无文本层（扫描件）的回退识别，
+     * content/fileName 为原始下载内容。具体实现仍为桩，暂返回内置固定数据；
+     * 接入真实 OCR 时只改此方法（渲染图片 + 逐页调用 + 按页拼接）。
      */
     private List<String> recognizeByOcr(byte[] content, String mimeType, String fileName) {
         log.debug("OCR 入参：fileName={}, mimeType={}, size={}B",

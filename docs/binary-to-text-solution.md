@@ -3,7 +3,9 @@
 > 状态：**方案评审稿**（保留为选型记录）。2026-11-20 已按一期最小范围落地 mock 实现：
 > `OcrRecognizeService#recognize(String)`（返回 `List<String>`）+ `recognizeFile(byte[], String)` 桩方法
 > + `OcrRecognizeTool`（`ocr_recognize`），详见 README 3.2。
-> 本文 4.4 / 5.1 中的 PDFBox / POI / 真实 OCR 属后续期次，尚未引入；工具名以代码中的 `ocr_recognize` 为准。
+> 本文 4.4 / 5.1 中的 PDFBox 路线已于 2026-11-24 落地（`PdfTextExtractor` 文本层直抽，
+> 扫描件回退 OCR 桩），详见 `docs/pdf-text-extraction-solution.md`；
+> 真实 OCR（扫描件）与 Tika 仍属后续期次；工具名以代码中的 `ocr_recognize` 为准。
 > 日期：2026-11-20
 > 适用工程：`xin_test`（Spring Boot 2.4.3 / JDK 8 / 内置 MCP Streamable HTTP 服务端）
 
@@ -199,7 +201,7 @@ public List<String> extract(String fileId);
 
 | 库 | 建议版本线 | JDK 8 兼容 | 备注 |
 | --- | --- | --- | --- |
-| Apache PDFBox | `2.0.x`（如 2.0.30） | ✅ | **3.x 要求 JDK 11+，不能直接用** |
+| Apache PDFBox | `2.0.x`（如 2.0.22） | ✅ | **3.x 要求 JDK 11+，不能直接用** |
 | Apache POI | `5.2.x` | ✅（需实测） | 依赖较多，会明显增大 jar |
 | Apache Tika | `1.28.x` | ✅ | **2.x 要求 JDK 11+**；若只做 PDF，可不用 Tika |
 | tess4j / Tesseract | `4.x` 或 `5.x` | ✅（需实测） | 需额外部署本地 tesseract 与语言包，或改用云 OCR |
